@@ -1,0 +1,18 @@
+<div class="login-container">
+    <div class="login-card">
+        <h2>Iniciar sesión</h2>
+        <form #loginForm="ngForm" (ngSubmit)="login()" autocomplete="off">
+            <div class="form-group">
+                <label for="usr">Usuario</label>
+                <input type="text" id="usr" name="usr" required [(ngModel)]="usr">
+            </div>
+            <div class="form-group">
+                <label for="pwd">Contraseña</label>
+                <input type="password" id="pwd" name="pwd" required [(ngModel)]="pwd">
+            </div>
+            <button type="submit" class="btn btn-primary">
+                Iniciar Sesión
+            </button>
+        </form>
+    </div>
+</div>
