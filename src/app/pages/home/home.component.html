@@ -1,0 +1,68 @@
+<nav class="navbar">
+  <div class="logo">Pillarboxed</div>
+  <div class="nav-links">
+    <a href="#">Inicio</a>
+    <a href="#">Películas</a>
+    <a href="#">Series</a>
+  </div>
+
+  <div class="buscador">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8" />
+      <path d="m21 21-4.35-4.35" />
+    </svg>
+
+    <input
+      type="text"
+      placeholder="Buscar película..."
+      autocomplete="off"
+      [(ngModel)]="searchText"
+      (ngModelChange)="onSearchChange($event)"
+    />
+
+    @if (searchText) {
+      <button class="btn-limpiar" type="button" (click)="clearSearch()">×</button>
+    }
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-content">
+    <span class="badge">Destacado</span>
+    <h1>Dune: Parte Uno</h1>
+    <p class="meta">★ 8.5 &nbsp;|&nbsp; 2024 &nbsp;|&nbsp; Sci-Fi</p>
+    <p class="descripcion">Paul Atreides se une a los Fremen en su guerra sagrada contra los Harkonnen.</p>
+    <div class="botones">
+      <button class="btn-primary">Reproducir</button>
+      <button class="btn-secondary">+ Mi lista</button>
+    </div>
+  </div>
+</section>
+
+<div class="filtros">
+  <button class="filtro activo">Todos</button>
+  <button class="filtro">Acción</button>
+  <button class="filtro">Drama</button>
+  <button class="filtro">Comedia</button>
+  <button class="filtro">Terror</button>
+  <button class="filtro">Sci-Fi</button>
+</div>
+
+<section class="peliculas">
+  <div class="seccion-header">
+    <h2>{{ sectionTitle }}</h2>
+    <a href="#">Ver todo</a>
+  </div>
+
+  <div class="grid">
+    @if (loading) {
+      <p class="cargando">Cargando películas...</p>
+    } @else if (movies.length === 0) {
+      <p class="error">No encontramos películas.</p>
+    } @else {
+      @for (movie of movies; track movie.id) {
+        <app-movie-card [movie]="movie" />
+      }
+    }
+  </div>
+</section>
