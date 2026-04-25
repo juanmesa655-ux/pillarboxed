@@ -266,13 +266,17 @@ body {
 
 /* === GRID DE TARJETAS === */
 .grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+ display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 220px));
+  gap: 24px;
+  justify-content: start;
+  align-items: start;
 }
 
 .tarjeta {
   cursor: pointer;
+  width: 100%;
+  max-width: 220px;
 }
 
 .tarjeta:hover .poster {
