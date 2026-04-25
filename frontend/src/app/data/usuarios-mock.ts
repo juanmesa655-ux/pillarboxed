@@ -6,7 +6,7 @@ export const USUARIOS_MOCK: Usuario[] = [
     nombre: 'Samuel Pérez',
     email: 'samuel.sepulveda068@pascualbravo.edu.co',
     password: '1234',
-    carrera: 'Ingeniería de Sistemas',
+    carrera: 'Tecnología de Software',
     semestre: 5,
     fechaRegistro: new Date('2026-01-10')
   },
@@ -15,7 +15,7 @@ export const USUARIOS_MOCK: Usuario[] = [
     nombre: 'Juan Mesa',
     email: 'juan.mesa655@pascualbravo.edu.co',
     password: '1234',
-    carrera: 'Ingeniería de Sistemas',
+    carrera: 'Tecnología de Software',
     semestre: 5,
     fechaRegistro: new Date('2026-01-10')
   },

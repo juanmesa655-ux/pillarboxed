@@ -16,27 +16,27 @@ export class UtilityService {
 
   constructor() { }
 
-Login(email: string, password: string): Observable<boolean> {
-  return new Observable(subs => {
-    const usuario = USUARIOS_MOCK.find(
-      u => u.email === email && u.password === password
-    );
-    if (usuario) {
-      this.setSession(this.sessionKey, usuario);
-      subs.next(true);
-    } else {
-      subs.next(false);
-    }
-    subs.complete();
-  });
-}
+  Login(email: string, password: string): Observable<boolean> {
+    return new Observable(subs => {
+      const usuario = USUARIOS_MOCK.find(
+        u => u.email === email && u.password === password
+      );
+      if (usuario) {
+        this.setSession(this.sessionKey, usuario);
+        subs.next(true);
+      } else {
+        subs.next(false);
+      }
+      subs.complete();
+    });
+  }
 
   getCurrentUser(): any | undefined {
     return this.getSession<any>(this.sessionKey);
   }
 
   logout() {
-    this.setSession(this.sessionKey, undefined);
+    sessionStorage.removeItem(btoa(this.sessionKey));
   }
 
   isLoggedIn(): boolean {
@@ -56,7 +56,7 @@ Login(email: string, password: string): Observable<boolean> {
     if (value)
       sessionStorage.setItem(btoa(key), btoa(JSON.stringify(value)));
     else
-      sessionStorage.removeItem(key);
+      sessionStorage.removeItem(btoa(key));
   }
 
   AbrirModal(modal: ElementRef | undefined) {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Subject, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { Movie, MovieService } from '../../services/movie.service';
 import { Router } from '@angular/router';
@@ -22,7 +22,8 @@ export class Home implements OnInit {
   constructor(
     private movieService: MovieService,
     private util: UtilityService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {
     this.currentUsuario = this.util.getCurrentUser();
   }
@@ -43,9 +44,17 @@ export class Home implements OnInit {
         this.sectionTitle = `Resultados para "${query}"`;
         return this.movieService.searchMovies(query);
       }),
-    ).subscribe((movies) => {
-      this.movies = movies;
-      this.loading = false;
+    ).subscribe({
+      next: (movies) => {
+        this.movies = movies;
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error en búsqueda:', err);
+        this.loading = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 
@@ -61,9 +70,17 @@ export class Home implements OnInit {
   private loadPopularMovies(): void {
     this.loading = true;
     this.sectionTitle = 'Tendencias';
-    this.movieService.getPopularMovies().subscribe((movies) => {
-      this.movies = movies;
-      this.loading = false;
+    this.movieService.getPopularMovies().subscribe({
+      next: (movies) => {
+        this.movies = movies;
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error cargando películas:', err);
+        this.loading = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 
