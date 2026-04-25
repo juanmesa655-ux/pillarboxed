@@ -1,0 +1,14 @@
+<a [routerLink]="['/pelicula', movie.id]" class="tarjeta-link">
+  <div class="tarjeta">
+    <div class="poster-container">
+      @if (poster) {
+        <img [src]="poster" [alt]="movie.title" class="poster-imagen" />
+      } @else {
+        <div class="poster p1">🎬</div>
+      }
+      <div class="rating-badge">★ {{ rating }}</div>
+    </div>
+    <p class="titulo">{{ movie.title }}</p>
+    <p class="año">{{ year }}</p>
+  </div>
+</a>

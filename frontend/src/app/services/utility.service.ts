@@ -2,7 +2,7 @@ import { ElementRef, Injectable, signal } from '@angular/core';
 import { Modal } from 'bootstrap';
 import { Observable } from 'rxjs';
 import { ToasterModel } from '../models/core/toaster.model';
-import { Usuario } from '../models/usuario';
+import { USUARIOS_MOCK } from '../data/usuarios-mock';
 
 @Injectable({
   providedIn: 'root'
@@ -16,17 +16,23 @@ export class UtilityService {
 
   constructor() { }
 
-  Login(usr: string, pwd: string): Observable<boolean> {
-    return new Observable(subs => {
-      let rs = usr == 'admin' && pwd == 'admin';
-      this.setSession(this.sessionKey, { id: 1, nombre: "Omar", fechaRegistro: new Date() })
-      subs.next(rs);
-      subs.complete();
-    })
-  }
+Login(email: string, password: string): Observable<boolean> {
+  return new Observable(subs => {
+    const usuario = USUARIOS_MOCK.find(
+      u => u.email === email && u.password === password
+    );
+    if (usuario) {
+      this.setSession(this.sessionKey, usuario);
+      subs.next(true);
+    } else {
+      subs.next(false);
+    }
+    subs.complete();
+  });
+}
 
-  getCurrentUser(): Usuario | undefined {
-    return this.getSession<Usuario>(this.sessionKey);
+  getCurrentUser(): any | undefined {
+    return this.getSession<any>(this.sessionKey);
   }
 
   logout() {

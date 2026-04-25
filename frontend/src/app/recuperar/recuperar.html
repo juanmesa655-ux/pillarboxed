@@ -22,18 +22,18 @@
       <div class="ticket-hole"></div>
     </div>
 
+    <div class="admit-label">Restablecer contraseña</div>
+
+    <p class="instruccion">
+      Ingresa tu correo institucional y te enviaremos un enlace para restablecer tu contraseña.
+    </p>
+
     <div class="field-group">
       <div class="field-label">Correo institucional</div>
       <input class="field-input" type="email" placeholder="usuario@pascualbravo.edu.co" [(ngModel)]="email">
     </div>
 
-    <div class="field-group">
-      <div class="field-label">Contraseña</div>
-      <input class="field-input" type="password" placeholder="••••••••" [(ngModel)]="password">
-      <div class="forgot"><a routerLink="/recuperar">¿Contraseña olvidada?</a></div>
-    </div>
-
-    <button class="btn-enter" (click)="onLogin()">Entrar a la sala</button>
+    <button class="btn-enter" (click)="onEnviar()">Enviar enlace</button>
 
     <div class="divider">
       <div class="divider-line"></div>
@@ -41,7 +41,7 @@
       <div class="divider-line"></div>
     </div>
 
-    <button class="btn-register" (click)="onRegister()">Crear una cuenta</button>
+    <button class="btn-register" (click)="goToLogin()">Volver al inicio de sesión</button>
 
     <div class="ticket-bottom">
       <span class="ticket-meta">Fila A · Butaca 1</span>

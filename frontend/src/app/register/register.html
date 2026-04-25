@@ -1,0 +1,79 @@
+<div class="cinema-wrap">
+  <div class="projector-beam"></div>
+  <div class="screen-glow"></div>
+
+  <div class="film-strip-left">
+    <div class="film-frame" *ngFor="let f of frames"></div>
+  </div>
+  <div class="film-strip-right">
+    <div class="film-frame" *ngFor="let f of frames"></div>
+  </div>
+
+  <div class="seats-bg">
+    <div class="seat-row" *ngFor="let row of seatRows" [style.bottom.px]="row.bottom">
+      <div class="seat" *ngFor="let s of row.seats" [ngClass]="s"></div>
+    </div>
+  </div>
+
+  <div class="register-card">
+    <div class="ticket-top">
+      <div class="ticket-hole"></div>
+      <div class="brand">Pillarboxed</div>
+      <div class="ticket-hole"></div>
+    </div>
+
+    <div class="admit-label">Nueva cuenta</div>
+
+    <div class="form-grid">
+      <div class="field-group">
+        <div class="field-label">Nombre completo</div>
+        <input class="field-input" type="text" placeholder="Tu nombre" [(ngModel)]="nombre">
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">Correo institucional</div>
+        <input class="field-input" type="email" placeholder="usuario@pascualbravo.edu.co" [(ngModel)]="email">
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">Contraseña</div>
+        <input class="field-input" type="password" placeholder="••••••••" [(ngModel)]="password">
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">Confirmar contraseña</div>
+        <input class="field-input" type="password" placeholder="••••••••" [(ngModel)]="confirmPassword">
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">Carrera</div>
+        <select class="field-input" [(ngModel)]="carrera">
+          <option value="" disabled selected>Selecciona</option>
+          <option>Ingeniería de Sistemas</option>
+          <option>Ingeniería Mecánica</option>
+          <option>Ingeniería Eléctrica</option>
+          <option>Tecnología en Sistemas</option>
+          <option>Administración</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">Semestre</div>
+        <select class="field-input" [(ngModel)]="semestre">
+          <option value="" disabled selected>#</option>
+          <option *ngFor="let s of semestres" [value]="s">{{ s }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn-register-secondary" (click)="goToLogin()">Ya tengo cuenta</button>
+      <button class="btn-enter" (click)="onRegister()">Reservar mi butaca</button>
+    </div>
+
+    <div class="ticket-bottom">
+      <span class="ticket-meta">Sala principal</span>
+      <span class="ticket-meta">2026</span>
+    </div>
+  </div>
+</div>

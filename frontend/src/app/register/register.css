@@ -39,7 +39,7 @@
   position: absolute;
   top: -80px; left: 50%;
   transform: translateX(-50%);
-  width: 340px; height: 220px;
+  width: 500px; height: 220px;
   background: radial-gradient(ellipse at 50% 0%, rgba(255,220,150,0.07) 0%, transparent 70%);
   pointer-events: none;
   z-index: 1;
@@ -50,8 +50,8 @@
   top: 0; left: 50%;
   transform: translateX(-50%);
   width: 0; height: 0;
-  border-left: 120px solid transparent;
-  border-right: 120px solid transparent;
+  border-left: 180px solid transparent;
+  border-right: 180px solid transparent;
   border-top: 300px solid rgba(255,220,150,0.025);
   z-index: 1;
   pointer-events: none;
@@ -64,7 +64,6 @@
   overflow: hidden;
   z-index: 1;
 }
-
 .seat-row {
   display: flex;
   justify-content: center;
@@ -72,7 +71,6 @@
   position: absolute;
   left: 0; right: 0;
 }
-
 .seat {
   width: 18px; height: 14px;
   border-radius: 3px 3px 0 0;
@@ -93,12 +91,12 @@
 .seat-r4 { background: #151008; }
 .seat-occupied { background: #2a1c0a; }
 
-.login-card {
+.register-card {
   background: rgba(12,9,6,0.88);
   border: 1px solid rgba(200,160,80,0.25);
   border-radius: 4px;
-  padding: 36px 44px;
-  width: 340px;
+  padding: 36px 48px;
+  width: 680px;
   position: relative;
   z-index: 10;
 }
@@ -107,8 +105,8 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 26px;
-  padding-bottom: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 18px;
   border-bottom: 1px dashed rgba(200,160,80,0.2);
 }
 .ticket-hole {
@@ -126,7 +124,22 @@
   flex: 1; text-align: center;
 }
 
-.field-group { margin-bottom: 16px; }
+.admit-label {
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(200,160,80,0.35);
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 24px;
+}
+
+.field-group { display: flex; flex-direction: column; }
 .field-label {
   font-size: 10px;
   letter-spacing: 3px;
@@ -146,23 +159,21 @@
   outline: none;
   box-sizing: border-box;
   transition: border-color 0.2s;
+  appearance: none;
 }
 .field-input:focus { border-color: rgba(200,160,80,0.45); }
 .field-input::placeholder { color: rgba(200,160,80,0.2); font-style: italic; }
+select.field-input option { background: #1a1208; color: #d4b87a; }
 
-.forgot { text-align: right; margin-top: 6px; }
-.forgot a {
-  font-size: 11px;
-  color: rgba(200,160,80,0.4);
-  letter-spacing: 1px;
-  text-decoration: none;
-  font-style: italic;
-  transition: color 0.2s;
+.actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
 }
-.forgot a:hover { color: rgba(200,160,80,0.75); }
 
 .btn-enter {
-  width: 100%; margin-top: 20px; padding: 11px;
+  flex: 2;
+  padding: 11px;
   background: rgba(200,160,80,0.12);
   border: 1px solid rgba(200,160,80,0.4);
   border-radius: 2px;
@@ -175,15 +186,9 @@
 }
 .btn-enter:hover { background: rgba(200,160,80,0.2); }
 
-.divider {
-  display: flex; align-items: center;
-  gap: 10px; margin: 20px 0;
-}
-.divider-line { flex: 1; height: 1px; background: rgba(200,160,80,0.12); }
-.divider-text { font-size: 10px; color: rgba(200,160,80,0.25); letter-spacing: 3px; text-transform: uppercase; }
-
-.btn-register {
-  width: 100%; padding: 10px;
+.btn-register-secondary {
+  flex: 1;
+  padding: 11px;
   background: transparent;
   border: 1px solid rgba(200,160,80,0.15);
   border-radius: 2px;
@@ -194,10 +199,10 @@
   cursor: pointer;
   transition: all 0.2s;
 }
-.btn-register:hover { border-color: rgba(200,160,80,0.35); color: rgba(200,160,80,0.8); }
+.btn-register-secondary:hover { border-color: rgba(200,160,80,0.35); color: rgba(200,160,80,0.8); }
 
 .ticket-bottom {
-  margin-top: 22px; padding-top: 16px;
+  margin-top: 20px; padding-top: 16px;
   border-top: 1px dashed rgba(200,160,80,0.2);
   display: flex; justify-content: space-between;
 }
