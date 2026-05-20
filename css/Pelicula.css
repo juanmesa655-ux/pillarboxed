@@ -1,0 +1,207 @@
+/* === BOTÓN VOLVER === */
+.btn-volver {
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.btn-volver:hover {
+  color: white;
+}
+
+/* === LAYOUT: detalle + sidebar de reseñas === */
+.pagina-detalle {
+  display: flex;
+  align-items: flex-start;
+  padding: 0 32px;
+  gap: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* === HERO DE DETALLE === */
+.detalle-hero {
+  display: flex;
+  gap: 40px;
+  padding: 48px 40px 40px 0;
+  align-items: flex-start;
+  flex: 1;
+  min-width: 0;
+}
+
+/* === PÓSTER GRANDE === */
+.detalle-poster {
+  flex-shrink: 0;
+}
+
+.poster-grande {
+  width: 220px;
+  height: 330px;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #1a1a4e, #3a3a8c);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64px;
+}
+
+/* === INFO DE LA PELÍCULA === */
+.detalle-info {
+  flex: 1;
+}
+
+.detalle-titulo {
+  font-size: 36px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  line-height: 1.1;
+}
+
+/* === METADATA (rating, año, duración) === */
+.detalle-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.rating {
+  color: #f4c430;
+  font-weight: 500;
+}
+
+.genero-badge {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 2px;
+}
+
+/* === DESCRIPCIÓN === */
+.detalle-descripcion {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.7;
+  margin-bottom: 28px;
+  max-width: 560px;
+}
+
+/* === FICHA TÉCNICA === */
+.ficha {
+  margin-top: 32px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 24px;
+}
+
+.ficha-fila {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.etiqueta {
+  color: rgba(255, 255, 255, 0.4);
+  min-width: 80px;
+}
+
+.valor {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* === SIDEBAR DE RESEÑAS === */
+.resenas-sidebar {
+  width: 420px;
+  flex-shrink: 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 48px 0 40px 32px;
+  overflow-y: auto;
+  max-height: 90vh;
+  position: sticky;
+  top: 0;
+}
+
+/* en la sidebar, las tarjetas ocupan todo el ancho disponible */
+.resenas-sidebar .resena-form,
+.resenas-sidebar .resena-card {
+  max-width: 100%;
+}
+
+.resenas-header {
+  margin-bottom: 20px;
+}
+
+/* === RESPONSIVE — tablet (≤1200px) === */
+@media (max-width: 1200px) {
+  .resenas-sidebar {
+    width: 340px;
+  }
+}
+
+/* === RESPONSIVE — tablet angosto/móvil (≤900px): apilado === */
+@media (max-width: 900px) {
+  .pagina-detalle {
+    flex-direction: column;
+    padding: 0 20px;
+  }
+
+  .detalle-hero {
+    padding: 32px 0 24px 0;
+    width: 100%;
+    gap: 28px;
+  }
+
+  .resenas-sidebar {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    padding: 28px 0 32px 0;
+    max-height: none;
+    position: static;
+  }
+}
+
+/* === RESPONSIVE — móvil (≤600px) === */
+@media (max-width: 600px) {
+  .pagina-detalle {
+    padding: 0 16px;
+  }
+
+  .detalle-hero {
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 0;
+    gap: 20px;
+  }
+
+  .poster-grande {
+    width: 150px;
+    height: 225px;
+    font-size: 48px;
+  }
+
+  .detalle-titulo {
+    font-size: 22px;
+    text-align: center;
+  }
+
+  .detalle-meta {
+    justify-content: center;
+  }
+
+  .detalle-descripcion {
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .botones {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}

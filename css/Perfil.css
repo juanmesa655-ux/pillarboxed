@@ -1,0 +1,321 @@
+/* === CABECERA DEL PERFIL === */
+.perfil-hero {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 48px 32px 32px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.avatar {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: #e5383b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: bold;
+  color: white;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.perfil-datos {
+  flex: 1;
+}
+
+.perfil-nombre {
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.perfil-email {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.btn-logout {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.5);
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.btn-logout:hover {
+  border-color: #e5383b;
+  color: #e5383b;
+}
+
+/* === BARRA DE ESTADÍSTICAS === */
+.stats-bar {
+  display: flex;
+  gap: 0;
+  padding: 0 32px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.stat {
+  padding: 24px 32px 24px 0;
+  text-align: left;
+  margin-right: 32px;
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.stat:last-child {
+  border-right: none;
+}
+
+.stat-numero {
+  font-size: 30px;
+  font-weight: bold;
+  color: #e5383b;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 6px;
+}
+
+/* === SECCIONES DEL PERFIL === */
+.perfil-seccion {
+  padding: 32px 32px 16px;
+}
+
+.perfil-seccion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.perfil-seccion-header h2 {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.perfil-seccion-header a {
+  font-size: 13px;
+  color: #e5383b;
+  text-decoration: none;
+}
+
+.perfil-seccion-header a:hover {
+  text-decoration: underline;
+}
+
+/* === GRID HORIZONTAL (lista y vistas) === */
+.perfil-grid {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+}
+
+.perfil-grid::-webkit-scrollbar {
+  height: 4px;
+}
+
+.perfil-grid::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 2px;
+}
+
+.perfil-grid::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+}
+
+/* === TARJETA COMPACTA === */
+.tarjeta-compacta-link {
+  flex-shrink: 0;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease;
+}
+
+.tarjeta-compacta-link:hover {
+  transform: translateY(-3px);
+}
+
+.tarjeta-compacta {
+  width: 100px;
+}
+
+.tarjeta-compacta-img {
+  width: 100px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 7px;
+  display: block;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.tarjeta-compacta-titulo {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
+}
+
+.tarjeta-compacta-anio {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.35);
+  margin-top: 2px;
+}
+
+/* === TARJETA DE RESEÑA EN PERFIL === */
+.resena-perfil {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 10px;
+  max-width: 640px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s ease;
+}
+
+.resena-perfil:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.resena-perfil-img {
+  width: 48px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 5px;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.resena-perfil-contenido {
+  flex: 1;
+  min-width: 0;
+}
+
+.resena-perfil-titulo {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.resena-perfil-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.resena-perfil-estrellas {
+  color: #f4c430;
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+.resena-perfil-fecha {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.resena-perfil-texto {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* === ESTADO VACÍO === */
+.perfil-vacio {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.3);
+  padding: 8px 0 20px;
+}
+
+/* === RESPONSIVE — tablet (≤768px) === */
+@media (max-width: 768px) {
+  .perfil-hero {
+    padding: 28px 16px 20px;
+    gap: 16px;
+  }
+
+  .avatar {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+  }
+
+  .perfil-nombre {
+    font-size: 18px;
+  }
+
+  .btn-logout {
+    padding: 7px 14px;
+    font-size: 12px;
+  }
+
+  .stats-bar {
+    padding: 0 16px;
+  }
+
+  .stat {
+    padding: 18px 16px 18px 0;
+    margin-right: 16px;
+  }
+
+  .stat-numero {
+    font-size: 24px;
+  }
+
+  .perfil-seccion {
+    padding: 20px 16px 8px;
+  }
+
+  .resena-perfil {
+    max-width: 100%;
+  }
+}
+
+/* === RESPONSIVE — móvil angosto (≤400px) === */
+@media (max-width: 400px) {
+  .perfil-hero {
+    flex-wrap: wrap;
+  }
+
+  .btn-logout {
+    width: 100%;
+    text-align: center;
+  }
+
+  .stats-bar {
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    border-right: none;
+    padding: 12px 16px 12px 0;
+    margin-right: 16px;
+  }
+}

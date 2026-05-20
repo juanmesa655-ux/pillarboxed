@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pillarboxed</title>
+    <link rel="stylesheet" href="css/Styles.css" />
+    <link rel="stylesheet" href="css/Foro.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="logo">Pillarboxed</div>
+      <div class="nav-links">
+        <a href="Index.html">Inicio</a>
+        <a href="Catalogo.html">Películas</a>
+        <a href="Proximamente.html">Series</a>
+        <a href="Wishlist.html">Mi lista</a>
+        <a href="Foro.html" class="activo">Foro</a>
+        <a href="Eventos.html">Eventos</a>
+        <a href="Perfil.html">Perfil</a>
+      </div>
+      <div id="nav-usuario"></div>
+    </nav>
+
+    <div class="hilo-container">
+
+      <a href="Foro.html" class="btn-volver-foro">← Volver al foro</a>
+
+      <!-- POST ORIGINAL -->
+      <div class="hilo-post">
+        <h1 id="hilo-titulo"></h1>
+        <div class="hilo-post-meta">
+          <span id="hilo-autor"></span>
+          <span id="hilo-fecha"></span>
+          <button class="btn-eliminar-hilo" id="btn-eliminar-hilo"
+            onclick="eliminarHilo()">Eliminar hilo</button>
+        </div>
+        <p class="hilo-post-texto" id="hilo-texto"></p>
+      </div>
+
+      <!-- RESPUESTAS -->
+      <div class="respuestas-header" id="contador-respuestas">0 respuestas</div>
+      <div id="lista-respuestas"></div>
+
+      <!-- FORMULARIO DE RESPUESTA (renderizado por JS) -->
+      <div id="form-respuesta" class="form-respuesta"></div>
+
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/Api.js"></script>
+    <script src="js/Wishlist.js"></script>
+    <script src="js/Hilo.js"></script>
+  </body>
+</html>
+

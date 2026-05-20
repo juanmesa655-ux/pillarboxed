@@ -1,0 +1,11 @@
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Domain\bin\Debug\net8.0\Pillarboxed.Domain.deps.json
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Domain\bin\Debug\net8.0\Pillarboxed.Domain.dll
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Domain\bin\Debug\net8.0\Pillarboxed.Domain.pdb
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Domain\obj\Debug\net8.0\Pillarboxed.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Domain\obj\Debug\net8.0\Pillarboxed.Domain.AssemblyInfoInputs.cache
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Domain\obj\Debug\net8.0\Pillarboxed.Domain.AssemblyInfo.cs
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Domain\obj\Debug\net8.0\Pillarboxed.Domain.csproj.CoreCompileInputs.cache
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Domain\obj\Debug\net8.0\Pillarboxed.Domain.dll
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Domain\obj\Debug\net8.0\refint\Pillarboxed.Domain.dll
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Domain\obj\Debug\net8.0\Pillarboxed.Domain.pdb
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Domain\obj\Debug\net8.0\ref\Pillarboxed.Domain.dll

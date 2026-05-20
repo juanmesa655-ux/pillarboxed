@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pillarboxed</title>
+    <link rel="stylesheet" href="css/Styles.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="logo">Pillarboxed</div>
+      <div class="nav-links">
+        <a href="Index.html">Inicio</a>
+        <a href="Catalogo.html">Películas</a>
+        <a href="Proximamente.html">Series</a>
+        <a href="Wishlist.html">Mi lista</a>
+        <a href="Foro.html">Foro</a>
+        <a href="Eventos.html">Eventos</a>
+        <a href="Perfil.html">Perfil</a>
+      </div>
+      <div id="nav-usuario"></div>
+
+      <div class="buscador">
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" />
+        </svg>
+
+        <input
+          type="text"
+          id="input-buscar"
+          placeholder="Buscar pelicula..."
+          autocomplete="off"
+        />
+
+        <button id="btn-limpiar" class="btn-limpiar"></button>
+      </div>
+    </nav>
+
+    <section class="hero-slider" id="hero-slider">
+      <!-- Los slides se generan dinámicamente por App.js desde TMDB -->
+      <button class="slider-btn slider-prev" onclick="cambiarSlide(-1)">&#8249;</button>
+      <button class="slider-btn slider-next" onclick="cambiarSlide(1)">&#8250;</button>
+      <div class="slider-dots" id="hero-dots"></div>
+    </section>
+
+    <div class="filtros">
+      <button class="filtro activo" data-filtro="todos">Todos</button>
+      <button class="filtro" data-filtro="accion">Acción</button>
+      <button class="filtro" data-filtro="drama">Drama</button>
+      <button class="filtro" data-filtro="comedia">Comedia</button>
+      <button class="filtro" data-filtro="terror">Terror</button>
+      <button class="filtro" data-filtro="sci-fi">Sci-Fi</button>
+    </div>
+
+    <section class="peliculas">
+      <div class="seccion-header">
+        <h2>Tendencias</h2>
+        <a href="#">Ver todo</a>
+      </div>
+
+      <div class="grid" id="grid-peliculas">
+        <p class="cargando">Cargando películas...</p>
+      </div>
+    </section>
+    <script src="js/config.js"></script>
+    <script src="js/Api.js"></script>
+    <script src="js/Wishlist.js"></script>
+    <script src="js/App.js"></script>
+    <script src="js/Script.js"></script>
+  </body>
+</html>
+

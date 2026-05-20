@@ -1,0 +1,355 @@
+/* === CABECERA DEL FORO === */
+.foro-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40px 32px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.foro-titulo {
+  font-size: 26px;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.foro-subtitulo {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* === FORMULARIO NUEVO HILO === */
+.form-hilo {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  padding: 0 32px;
+}
+
+.form-hilo.visible {
+  max-height: 400px;
+  padding: 0 32px 28px;
+}
+
+.form-hilo-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 720px;
+  padding-top: 24px;
+}
+
+/* === INPUTS DEL FORO === */
+.foro-input,
+.foro-textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  color: white;
+  font-family: Arial, sans-serif;
+  padding: 12px 14px;
+  transition: border-color 0.2s ease;
+}
+
+.foro-input {
+  font-size: 15px;
+}
+
+.foro-textarea {
+  font-size: 14px;
+  resize: vertical;
+  min-height: 90px;
+}
+
+.foro-input:focus,
+.foro-textarea:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.foro-input::placeholder,
+.foro-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* === LISTA DE HILOS === */
+.lista-hilos {
+  padding: 24px 32px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 860px;
+}
+
+.hilo-card {
+  display: block;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 18px 20px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+}
+
+.hilo-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.07);
+  transform: translateX(3px);
+}
+
+.hilo-titulo {
+  font-size: 15px;
+  font-weight: 500;
+  color: white;
+  margin-bottom: 6px;
+}
+
+.hilo-extracto {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.hilo-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.hilo-autor {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.hilo-respuestas {
+  margin-left: auto;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* === ESTADO VACÍO === */
+.foro-vacio {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.3);
+  padding: 12px 0;
+}
+
+.link-rojo {
+  color: #e5383b;
+  text-decoration: none;
+}
+
+.link-rojo:hover {
+  text-decoration: underline;
+}
+
+/* ============================================================
+   PÁGINA DE HILO (Hilo.html)
+   ============================================================ */
+
+.hilo-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 32px 64px;
+}
+
+.btn-volver-foro {
+  display: inline-block;
+  color: rgba(255, 255, 255, 0.45);
+  text-decoration: none;
+  font-size: 13px;
+  margin-bottom: 28px;
+  transition: color 0.2s ease;
+}
+
+.btn-volver-foro:hover {
+  color: white;
+}
+
+/* === POST ORIGINAL === */
+.hilo-post {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 28px;
+  margin-bottom: 36px;
+}
+
+.hilo-post h1 {
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.25;
+  margin-bottom: 14px;
+}
+
+.hilo-post-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.hilo-post-texto {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.75;
+  white-space: pre-wrap;
+}
+
+/* === BOTÓN ELIMINAR HILO === */
+.btn-eliminar-hilo {
+  display: none;
+  margin-left: auto;
+  background: none;
+  border: 1px solid rgba(229, 56, 59, 0.35);
+  color: rgba(229, 56, 59, 0.65);
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-eliminar-hilo:hover {
+  background: rgba(229, 56, 59, 0.1);
+  color: #e5383b;
+  border-color: #e5383b;
+}
+
+/* === CONTADOR DE RESPUESTAS === */
+.respuestas-header {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* === TARJETA DE RESPUESTA === */
+.respuesta-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin-bottom: 10px;
+}
+
+.respuesta-card.propia {
+  border-color: rgba(229, 56, 59, 0.22);
+  background: rgba(229, 56, 59, 0.04);
+}
+
+.respuesta-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.respuesta-autor {
+  font-size: 13px;
+  font-weight: 500;
+  color: white;
+}
+
+.respuesta-fecha {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-eliminar-respuesta {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s ease;
+}
+
+.btn-eliminar-respuesta:hover {
+  color: #e5383b;
+}
+
+.respuesta-texto {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.65;
+  white-space: pre-wrap;
+}
+
+/* === FORMULARIO DE RESPUESTA === */
+.form-respuesta {
+  margin-top: 32px;
+  padding-top: 28px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-respuesta-titulo {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .foro-header {
+    padding: 28px 16px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .form-hilo {
+    padding: 0 16px;
+  }
+
+  .form-hilo.visible {
+    padding: 0 16px 24px;
+  }
+
+  .lista-hilos {
+    padding: 20px 16px 40px;
+  }
+
+  .hilo-container {
+    padding: 24px 16px 48px;
+  }
+
+  .hilo-post {
+    padding: 20px 16px;
+  }
+
+  .hilo-post h1 {
+    font-size: 19px;
+  }
+
+  .hilo-post-meta {
+    gap: 8px;
+  }
+
+  .btn-eliminar-hilo {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 400px) {
+  .hilo-card {
+    padding: 14px 14px;
+  }
+
+  .hilo-titulo {
+    font-size: 14px;
+  }
+}

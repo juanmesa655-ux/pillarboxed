@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pillarboxed</title>
+    <link rel="stylesheet" href="css/Styles.css" />
+    <link rel="stylesheet" href="css/Pelicula.css" />
+    <link rel="stylesheet" href="css/Resenas.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="logo">Pillarboxed</div>
+      <div class="nav-links">
+        <a href="Index.html">Inicio</a>
+        <a href="Catalogo.html">Películas</a>
+        <a href="Proximamente.html">Series</a>
+        <a href="Wishlist.html">Mi lista</a>
+        <a href="Foro.html">Foro</a>
+        <a href="Eventos.html">Eventos</a>
+        <a href="Perfil.html">Perfil</a>
+      </div>
+      <div id="nav-usuario"></div>
+      <a href="Index.html" class="btn-volver">← Volver</a>
+    </nav>
+
+    <!-- LAYOUT: detalle (izquierda) + reseñas (derecha) -->
+    <div class="pagina-detalle">
+
+      <section class="detalle-hero" id="detalle-hero">
+        <div class="detalle-poster">
+          <div class="poster-grande" id="detalle-poster"></div>
+        </div>
+        <div class="detalle-info">
+          <h1 class="detalle-titulo" id="detalle-titulo">Cargando...</h1>
+          <div class="detalle-meta" id="detalle-meta"></div>
+          <p class="detalle-descripcion" id="detalle-descripcion"></p>
+          <div class="botones">
+            <button class="btn-primary"
+              onclick="window.location.href='404.html'">▶ Reproducir</button>
+            <button class="btn-secondary" id="btn-wishlist-detalle"
+              onclick="toggleWishlistDetalle(this)">+ Mi lista</button>
+            <button class="btn-secondary" id="btn-vista-detalle"
+              onclick="toggleVistaDetalle(this)">Marcar como vista</button>
+          </div>
+          <div class="ficha" id="detalle-ficha"></div>
+        </div>
+      </section>
+
+      <!-- Sidebar de reseñas -->
+      <aside class="resenas-sidebar">
+        <div class="seccion-header resenas-header">
+          <h2>Reseñas</h2>
+          <span id="promedio-resenas" class="promedio-resenas"></span>
+        </div>
+        <div id="form-resena"></div>
+        <div id="lista-resenas"></div>
+      </aside>
+
+    </div>
+
+    <!-- SIMILARES: ancho completo -->
+    <section class="peliculas">
+      <div class="seccion-header">
+        <h2>También te puede gustar</h2>
+      </div>
+      <div class="grid" id="grid-relacionadas"></div>
+    </section>
+
+    <script src="js/config.js"></script>
+    <script src="js/Api.js"></script>
+    <script src="js/Wishlist.js"></script>
+    <script src="js/Vistas.js"></script>
+    <script src="js/Resenas.js"></script>
+    <script src="js/App.js"></script>
+    <script src="js/Script.js"></script>
+    <script src="js/Pelicula.js"></script>
+  </body>
+</html>
+

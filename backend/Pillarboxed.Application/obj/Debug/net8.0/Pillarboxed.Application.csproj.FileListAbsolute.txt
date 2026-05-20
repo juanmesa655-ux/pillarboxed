@@ -1,0 +1,15 @@
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Application\bin\Debug\net8.0\Pillarboxed.Application.deps.json
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Application\bin\Debug\net8.0\Pillarboxed.Application.dll
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Application\bin\Debug\net8.0\Pillarboxed.Application.pdb
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Application\bin\Debug\net8.0\Pillarboxed.Domain.dll
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Application\bin\Debug\net8.0\Pillarboxed.Domain.pdb
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Application\obj\Debug\net8.0\Pillarboxed.Application.csproj.AssemblyReference.cache
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Application\obj\Debug\net8.0\Pillarboxed.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Application\obj\Debug\net8.0\Pillarboxed.Application.AssemblyInfoInputs.cache
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Application\obj\Debug\net8.0\Pillarboxed.Application.AssemblyInfo.cs
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Application\obj\Debug\net8.0\Pillarboxed.Application.csproj.CoreCompileInputs.cache
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Application\obj\Debug\net8.0\Pillarbo.4436E502.Up2Date
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Application\obj\Debug\net8.0\Pillarboxed.Application.dll
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Application\obj\Debug\net8.0\refint\Pillarboxed.Application.dll
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Application\obj\Debug\net8.0\Pillarboxed.Application.pdb
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Application\obj\Debug\net8.0\ref\Pillarboxed.Application.dll

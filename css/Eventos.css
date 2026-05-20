@@ -1,0 +1,239 @@
+/* === CABECERA === */
+.eventos-header {
+  padding: 40px 32px 28px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.eventos-titulo {
+  font-size: 26px;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.eventos-subtitulo {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* === FILTROS === */
+.filtros-eventos {
+  display: flex;
+  gap: 8px;
+  padding: 20px 32px;
+  flex-wrap: wrap;
+}
+
+.filtro-evento {
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filtro-evento:hover {
+  border-color: rgba(255, 255, 255, 0.45);
+  color: white;
+}
+
+.filtro-evento.activo {
+  background: #e5383b;
+  border-color: #e5383b;
+  color: white;
+}
+
+/* === GRID DE EVENTOS === */
+.lista-eventos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding: 8px 32px 56px;
+  max-width: 1100px;
+}
+
+/* === TARJETA DE EVENTO === */
+.evento-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.evento-card:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-3px);
+}
+
+.evento-card.pasado {
+  opacity: 0.5;
+}
+
+.evento-card.pasado:hover {
+  transform: none;
+}
+
+/* === FILA SUPERIOR: badge tipo + fecha === */
+.evento-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* === BADGE DE TIPO === */
+.evento-badge {
+  font-size: 11px;
+  font-weight: bold;
+  padding: 3px 10px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.tipo-proyeccion { background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
+.tipo-cineforo   { background: rgba(139, 92, 246, 0.2); color: #c4b5fd; }
+.tipo-taller     { background: rgba(34, 197, 94, 0.2);  color: #86efac; }
+.tipo-festival   { background: rgba(229, 56, 59, 0.2);  color: #fca5a5; }
+
+/* === FECHA === */
+.evento-fecha-badge {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* === CONTENIDO === */
+.evento-titulo {
+  font-size: 16px;
+  font-weight: 500;
+  color: white;
+  line-height: 1.3;
+}
+
+.evento-descripcion {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.6;
+  flex: 1;
+}
+
+/* === DETALLES (lugar, hora, precio) === */
+.evento-detalles {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  padding-top: 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.evento-detalle {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.evento-detalle-label {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* === BOTÓN INSCRIBIRSE === */
+.btn-inscripcion {
+  margin-top: 4px;
+  padding: 9px 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.btn-inscripcion:hover {
+  background: rgba(255, 255, 255, 0.13);
+  color: white;
+}
+
+.btn-inscripcion.inscrito {
+  background: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.4);
+  color: #86efac;
+}
+
+.btn-inscripcion.inscrito:hover {
+  background: rgba(229, 56, 59, 0.1);
+  border-color: rgba(229, 56, 59, 0.4);
+  color: #fca5a5;
+}
+
+/* hover sobre inscrito sugiere que se puede cancelar */
+.btn-inscripcion.inscrito:hover::before {
+  content: "Cancelar — ";
+}
+
+/* === ETIQUETA Y ESTADO VACÍO === */
+.eventos-pasados-label {
+  grid-column: 1 / -1;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.3);
+  padding: 16px 0 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.evento-finalizado {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.25);
+  margin-top: 4px;
+}
+
+.eventos-vacio {
+  grid-column: 1 / -1;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.3);
+  padding: 24px 0;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .eventos-header {
+    padding: 28px 16px 20px;
+  }
+
+  .filtros-eventos {
+    padding: 16px 16px;
+    gap: 6px;
+  }
+
+  .filtro-evento {
+    font-size: 12px;
+    padding: 5px 12px;
+  }
+
+  .lista-eventos {
+    grid-template-columns: 1fr;
+    padding: 8px 16px 40px;
+    gap: 12px;
+  }
+
+  .evento-card {
+    padding: 18px 16px;
+  }
+}
+
+@media (max-width: 400px) {
+  .evento-detalles {
+    gap: 10px;
+  }
+}

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mi perfil - Pillarboxed</title>
+    <link rel="stylesheet" href="css/Styles.css" />
+    <link rel="stylesheet" href="css/Perfil.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="logo">Pillarboxed</div>
+      <div class="nav-links">
+        <a href="Index.html">Inicio</a>
+        <a href="Catalogo.html">Películas</a>
+        <a href="Proximamente.html">Series</a>
+        <a href="Wishlist.html">Mi lista</a>
+        <a href="Foro.html">Foro</a>
+        <a href="Eventos.html">Eventos</a>
+        <a href="Perfil.html" class="activo">Perfil</a>
+      </div>
+    </nav>
+
+    <!-- CABECERA DEL PERFIL -->
+    <div class="perfil-hero">
+      <div class="avatar" id="perfil-avatar"></div>
+      <div class="perfil-datos">
+        <p class="perfil-nombre" id="perfil-nombre"></p>
+        <p class="perfil-email" id="perfil-email"></p>
+      </div>
+      <button class="btn-logout" onclick="cerrarSesion()">Cerrar sesión</button>
+    </div>
+
+    <!-- ESTADÍSTICAS -->
+    <div class="stats-bar">
+      <div class="stat">
+        <div class="stat-numero" id="stat-lista">0</div>
+        <div class="stat-label">En mi lista</div>
+      </div>
+      <div class="stat">
+        <div class="stat-numero" id="stat-vistas">0</div>
+        <div class="stat-label">Vistas</div>
+      </div>
+      <div class="stat">
+        <div class="stat-numero" id="stat-resenas">0</div>
+        <div class="stat-label">Reseñas</div>
+      </div>
+    </div>
+
+    <!-- MI LISTA -->
+    <section class="perfil-seccion">
+      <div class="perfil-seccion-header">
+        <h2>Mi lista</h2>
+        <a href="Wishlist.html">Ver todo</a>
+      </div>
+      <div class="perfil-grid" id="perfil-lista"></div>
+    </section>
+
+    <!-- PELÍCULAS VISTAS -->
+    <section class="perfil-seccion">
+      <div class="perfil-seccion-header">
+        <h2>Películas vistas</h2>
+      </div>
+      <div class="perfil-grid" id="perfil-vistas"></div>
+    </section>
+
+    <!-- MIS RESEÑAS -->
+    <section class="perfil-seccion">
+      <div class="perfil-seccion-header">
+        <h2>Mis reseñas</h2>
+      </div>
+      <div id="perfil-resenas"></div>
+    </section>
+
+    <script src="js/config.js"></script>
+    <script src="js/Api.js"></script>
+    <script src="js/Wishlist.js"></script>
+    <script src="js/Vistas.js"></script>
+    <script src="js/Perfil.js"></script>
+  </body>
+</html>
+

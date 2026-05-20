@@ -1,0 +1,5 @@
+﻿.claude/
+backend/bin/
+backend/obj/
+backend/.vs/
+*.user

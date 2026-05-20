@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Eventos - Pillarboxed</title>
+    <link rel="stylesheet" href="css/Styles.css" />
+    <link rel="stylesheet" href="css/Eventos.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="logo">Pillarboxed</div>
+      <div class="nav-links">
+        <a href="Index.html">Inicio</a>
+        <a href="Catalogo.html">Películas</a>
+        <a href="Proximamente.html">Series</a>
+        <a href="Wishlist.html">Mi lista</a>
+        <a href="Foro.html">Foro</a>
+        <a href="Eventos.html" class="activo">Eventos</a>
+        <a href="Perfil.html">Perfil</a>
+      </div>
+      <div id="nav-usuario"></div>
+    </nav>
+
+    <!-- CABECERA -->
+    <div class="eventos-header">
+      <h1 class="eventos-titulo">Eventos de cine</h1>
+      <p class="eventos-subtitulo">
+        Proyecciones, talleres, cineforos y festivales en Pascual Bravo
+      </p>
+    </div>
+
+    <!-- FILTROS -->
+    <div class="filtros-eventos">
+      <button class="filtro-evento activo" data-filtro="todos">Todos</button>
+      <button class="filtro-evento" data-filtro="proyeccion">Proyecciones</button>
+      <button class="filtro-evento" data-filtro="cineforo">Cineforos</button>
+      <button class="filtro-evento" data-filtro="taller">Talleres</button>
+      <button class="filtro-evento" data-filtro="festival">Festivales</button>
+    </div>
+
+    <!-- LISTA DE EVENTOS -->
+    <div class="lista-eventos" id="lista-eventos"></div>
+
+    <script src="js/config.js"></script>
+    <script src="js/Api.js"></script>
+    <script src="js/Wishlist.js"></script>
+    <script src="js/Eventos.js"></script>
+  </body>
+</html>
+

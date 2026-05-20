@@ -1,0 +1,17 @@
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Infrastructure\bin\Debug\net8.0\Pillarboxed.Infrastructure.deps.json
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Infrastructure\bin\Debug\net8.0\Pillarboxed.Infrastructure.dll
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Infrastructure\bin\Debug\net8.0\Pillarboxed.Infrastructure.pdb
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Infrastructure\bin\Debug\net8.0\Pillarboxed.Application.dll
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Infrastructure\bin\Debug\net8.0\Pillarboxed.Domain.dll
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Infrastructure\bin\Debug\net8.0\Pillarboxed.Domain.pdb
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Infrastructure\bin\Debug\net8.0\Pillarboxed.Application.pdb
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Infrastructure\obj\Debug\net8.0\Pillarboxed.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Infrastructure\obj\Debug\net8.0\Pillarboxed.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Infrastructure\obj\Debug\net8.0\Pillarboxed.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Infrastructure\obj\Debug\net8.0\Pillarboxed.Infrastructure.AssemblyInfo.cs
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Infrastructure\obj\Debug\net8.0\Pillarboxed.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Infrastructure\obj\Debug\net8.0\Pillarbo.C9FE5A75.Up2Date
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Infrastructure\obj\Debug\net8.0\Pillarboxed.Infrastructure.dll
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Infrastructure\obj\Debug\net8.0\refint\Pillarboxed.Infrastructure.dll
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Infrastructure\obj\Debug\net8.0\Pillarboxed.Infrastructure.pdb
+C:\Users\Samuel S\Documents\Wb\backend\Pillarboxed.Infrastructure\obj\Debug\net8.0\ref\Pillarboxed.Infrastructure.dll

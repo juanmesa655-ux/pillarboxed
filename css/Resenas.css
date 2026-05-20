@@ -1,0 +1,176 @@
+/* === PROMEDIO === */
+.promedio-resenas {
+  font-size: 14px;
+  color: #f4c430;
+  font-weight: 500;
+}
+
+/* === FORMULARIO === */
+.resena-form {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  max-width: 640px;
+}
+
+.form-label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 10px;
+}
+
+/* === ESTRELLAS INTERACTIVAS === */
+.estrellas-input {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.estrella {
+  font-size: 28px;
+  color: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: color 0.1s ease, transform 0.1s ease;
+  line-height: 1;
+  user-select: none;
+}
+
+.estrella:hover {
+  transform: scale(1.15);
+}
+
+.estrella.activa {
+  color: #f4c430;
+}
+
+/* === TEXTAREA === */
+.resena-textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  padding: 12px;
+  resize: vertical;
+  min-height: 100px;
+  margin-bottom: 14px;
+  transition: border-color 0.2s ease;
+}
+
+.resena-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.resena-textarea:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* === TARJETA DE RESEÑA === */
+.resena-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  max-width: 640px;
+}
+
+.resena-card.propia {
+  border-color: rgba(229, 56, 59, 0.3);
+  background: rgba(229, 56, 59, 0.05);
+}
+
+.resena-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.resena-autor {
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+}
+
+.resena-estrellas {
+  color: #f4c430;
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+
+.resena-fecha {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.3);
+  margin-left: auto;
+}
+
+.resena-texto {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.6;
+}
+
+/* === BOTONES DE ACCIÓN DE RESEÑA === */
+.resena-acciones {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.btn-resena {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.btn-resena:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  color: white;
+}
+
+.btn-resena.eliminar:hover {
+  border-color: #e5383b;
+  color: #e5383b;
+}
+
+/* === LINK ROJO (iniciar sesión) === */
+.link-rojo {
+  color: #e5383b;
+  text-decoration: none;
+}
+
+.link-rojo:hover {
+  text-decoration: underline;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .resena-fecha {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .resena-form {
+    padding: 16px;
+  }
+
+  .estrella {
+    font-size: 24px;
+  }
+
+  .resena-card {
+    padding: 14px 16px;
+  }
+}

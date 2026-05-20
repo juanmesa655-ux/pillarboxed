@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Foro - Pillarboxed</title>
+    <link rel="stylesheet" href="css/Styles.css" />
+    <link rel="stylesheet" href="css/Foro.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="logo">Pillarboxed</div>
+      <div class="nav-links">
+        <a href="Index.html">Inicio</a>
+        <a href="Catalogo.html">Películas</a>
+        <a href="Proximamente.html">Series</a>
+        <a href="Wishlist.html">Mi lista</a>
+        <a href="Foro.html" class="activo">Foro</a>
+        <a href="Eventos.html">Eventos</a>
+        <a href="Perfil.html">Perfil</a>
+      </div>
+      <div id="nav-usuario"></div>
+    </nav>
+
+    <!-- CABECERA -->
+    <div class="foro-header">
+      <div>
+        <h1 class="foro-titulo">Foro de discusión</h1>
+        <p class="foro-subtitulo">Comparte y discute tus películas favoritas</p>
+      </div>
+      <button class="btn-primary" id="btn-nuevo-hilo"
+        onclick="toggleFormulario()">+ Nuevo hilo</button>
+    </div>
+
+    <!-- FORMULARIO NUEVO HILO (oculto por defecto) -->
+    <div class="form-hilo" id="form-nuevo-hilo">
+      <div class="form-hilo-inner">
+        <input type="text" id="input-titulo" class="foro-input"
+          placeholder="Título del hilo" maxlength="120" />
+        <textarea id="input-texto" class="foro-textarea"
+          placeholder="¿De qué quieres hablar?"></textarea>
+        <div>
+          <button class="btn-primary" onclick="publicarHilo()">Publicar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LISTA DE HILOS -->
+    <div id="lista-hilos" class="lista-hilos"></div>
+
+    <script src="js/config.js"></script>
+    <script src="js/Api.js"></script>
+    <script src="js/Wishlist.js"></script>
+    <script src="js/Foro.js"></script>
+  </body>
+</html>
+

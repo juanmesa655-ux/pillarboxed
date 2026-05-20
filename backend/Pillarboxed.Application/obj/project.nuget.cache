@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "c8IbX1RmfZY=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Samuel S\\Documents\\Wb\\backend\\Pillarboxed.Application\\Pillarboxed.Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Samuel S\\.nuget\\packages\\bcrypt.net-next\\4.2.1\\bcrypt.net-next.4.2.1.nupkg.sha512",
+    "C:\\Users\\Samuel S\\.nuget\\packages\\mediatr\\12.5.0\\mediatr.12.5.0.nupkg.sha512",
+    "C:\\Users\\Samuel S\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",
+    "C:\\Users\\Samuel S\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

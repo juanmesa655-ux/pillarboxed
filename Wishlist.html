@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mi lista - Pillarboxed</title>
+    <link rel="stylesheet" href="css/Styles.css" />
+  </head>
+
+  <body>
+    <nav class="navbar">
+      <div class="logo">Pillarboxed</div>
+      <div class="nav-links">
+        <a href="Index.html">Inicio</a>
+        <a href="Catalogo.html">Películas</a>
+        <a href="Proximamente.html">Series</a>
+        <a href="Wishlist.html" class="activo">Mi lista</a>
+        <a href="Foro.html">Foro</a>
+        <a href="Eventos.html">Eventos</a>
+        <a href="Perfil.html">Perfil</a>
+      </div>
+      <div id="nav-usuario"></div>
+    </nav>
+
+    <!-- estado vacío -->
+    <div id="wishlist-vacia" class="wishlist-vacia">
+      <h3>Tu lista está vacía</h3>
+      <p>Agrega películas con el botón "+ Mi lista" desde la página principal.</p>
+      <a href="Index.html" class="btn-explorar">Explorar películas</a>
+    </div>
+
+    <!-- grid de películas guardadas -->
+    <section class="peliculas" id="seccion-lista">
+      <div class="seccion-header">
+        <h2 id="titulo-lista">Mi lista</h2>
+      </div>
+      <div class="grid" id="grid-wishlist"></div>
+    </section>
+
+    <script src="js/config.js"></script>
+    <script src="js/Api.js"></script>
+    <script src="js/Wishlist.js"></script>
+    <script src="js/WishlistPage.js"></script>
+  </body>
+</html>
+
