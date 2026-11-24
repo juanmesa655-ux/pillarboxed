@@ -1,3 +1,5 @@
+import { isInstitutionalEmail } from "@/lib/data/auth-repository";
+
 export type AccessRequestRelationship = "egresado" | "trabajador";
 
 export type AccessRequest = {
@@ -17,7 +19,10 @@ export type NewAccessRequest = Pick<
 
 export type SubmitAccessRequestResult =
   | { ok: true; request: AccessRequest }
-  | { ok: false; reason: "unavailable" | "invalid-data" };
+  | {
+      ok: false;
+      reason: "institutional-email" | "unavailable" | "invalid-data";
+    };
 
 export interface AccessRequestRepository {
   submit(request: NewAccessRequest): SubmitAccessRequestResult;
@@ -76,11 +81,16 @@ function readRequests():
 
 export const accessRequestRepository: AccessRequestRepository = {
   submit(input) {
+    if (isInstitutionalEmail(input.email)) {
+      return { ok: false, reason: "institutional-email" };
+    }
+
     const stored = readRequests();
     if (!stored.ok) return stored;
 
     const request: AccessRequest = {
       ...input,
+      email: input.email.trim(),
       id: crypto.randomUUID(),
       status: "pendiente",
       createdAt: new Date().toISOString(),

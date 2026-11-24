@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { MovieCard } from "@/components/movies/movie-card";
 import {
   tmdbMovieRepository,
   type MovieSummary,
@@ -18,73 +18,29 @@ type CatalogState =
       reason: Exclude<Extract<TrendingMoviesResult, { ok: false }>["reason"], "aborted">;
     };
 
-function LoadingGrid() {
+function LoadingMovies({ layout }: { layout: "grid" | "horizontal" }) {
+    const listClassName =
+      layout === "horizontal"
+        ? "flex gap-4 overflow-x-auto pb-2 sm:gap-6"
+        : "grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 2xl:grid-cols-5";
+
   return (
-    <div
-      className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 2xl:grid-cols-5"
+      <ul
+        className={listClassName}
       role="status"
       aria-label="Cargando películas populares"
     >
-      {Array.from({ length: 10 }, (_, index) => (
-        <div key={index} className="animate-pulse">
-          <div className="aspect-2/3 border border-border bg-(--surface)" />
-          <div className="mt-3 h-4 w-3/4 bg-(--surface)" />
-          <div className="mt-2 h-3 w-1/2 bg-(--surface)" />
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function MovieCard({ movie }: { movie: MovieSummary }) {
-  const year = movie.releaseDate?.match(/^\d{4}/)?.[0];
-  const posterUrl = movie.posterPath
-    ? `https://image.tmdb.org/t/p/w500${movie.posterPath}`
-    : null;
-
-  return (
-    <article className="group min-w-0">
-      <div className="relative aspect-2/3 overflow-hidden border border-border bg-(--surface)">
-        {posterUrl ? (
-          <Image
-            src={posterUrl}
-            alt={`Póster de ${movie.title}`}
-            fill
-            sizes="(max-width: 640px) 45vw, (max-width: 1024px) 28vw, 20vw"
-            className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-          />
-        ) : (
-          <div
-            className="flex h-full items-center justify-center px-4 text-center text-sm text-(--fg-muted)"
-            role="img"
-            aria-label={`Póster no disponible para ${movie.title}`}
+        {Array.from({ length: layout === "horizontal" ? 5 : 10 }, (_, index) => (
+          <li
+            key={index}
+            className={`${layout === "horizontal" ? "w-36 shrink-0 sm:w-44" : ""} animate-pulse`}
           >
-            Sin póster disponible
-          </div>
-        )}
-      </div>
-      <h2 className="mt-3 line-clamp-2 font-(family-name:--font-title) text-lg font-semibold leading-tight text-(--fg)">
-        {movie.title}
-      </h2>
-      <p className="mt-2 flex flex-wrap gap-x-2 font-mono text-xs text-(--fg-secondary)">
-        <span>{year ?? "Año no disponible"}</span>
-        <span aria-hidden="true">·</span>
-        <span>
-          {movie.voteAverage === null
-            ? "Sin puntuación"
-            : `${movie.voteAverage.toFixed(1)} / 10`}
-        </span>
-      </p>
-      {movie.overview ? (
-        <p className="mt-3 line-clamp-3 text-sm leading-6 text-(--fg-secondary)">
-          {movie.overview}
-        </p>
-      ) : (
-        <p className="mt-3 text-sm leading-6 text-(--fg-muted)">
-          Sin sinopsis disponible.
-        </p>
-      )}
-    </article>
+            <div className="aspect-2/3 border border-border bg-(--surface)" />
+            <div className="mt-3 h-4 w-3/4 bg-(--surface)" />
+            <div className="mt-2 h-3 w-1/2 bg-(--surface)" />
+          </li>
+      ))}
+      </ul>
   );
 }
 
@@ -100,7 +56,13 @@ function errorMessage(
   return "No pudimos cargar las películas. Intenta de nuevo.";
 }
 
-export function TrendingMovies() {
+export function TrendingMovies({
+  layout = "grid",
+  limit,
+}: {
+  layout?: "grid" | "horizontal";
+  limit?: number;
+}) {
   const [attempt, setAttempt] = useState(0);
   const [state, setState] = useState<CatalogState>({ status: "loading" });
 
@@ -128,7 +90,7 @@ export function TrendingMovies() {
   }, [attempt]);
 
   if (state.status === "loading") {
-    return <LoadingGrid />;
+    return <LoadingMovies layout={layout} />;
   }
 
   if (state.status === "empty") {
@@ -158,11 +120,24 @@ export function TrendingMovies() {
     );
   }
 
+  const movies = limit === undefined ? state.movies : state.movies.slice(0, limit);
+  const listClassName =
+    layout === "horizontal"
+      ? "flex gap-4 overflow-x-auto pb-2 sm:gap-6"
+      : "grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 2xl:grid-cols-5";
+
   return (
-    <ul className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 2xl:grid-cols-5">
-      {state.movies.map((movie) => (
-        <li key={movie.id}>
-          <MovieCard movie={movie} />
+    <ul className={listClassName}>
+      {movies.map((movie, index) => (
+        <li
+          key={movie.id}
+          className={layout === "horizontal" ? "w-36 shrink-0 sm:w-44" : ""}
+        >
+          <MovieCard
+            movie={movie}
+            compact={layout === "horizontal"}
+            priority={index === 0}
+          />
         </li>
       ))}
     </ul>

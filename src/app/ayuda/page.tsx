@@ -25,10 +25,10 @@ const helpSections = [
             >
               inicio
             </Link>
-            , selecciona «Crear cuenta» y completa el formulario. Este prototipo
-            solo muestra y valida el formulario: todavía no crea una cuenta ni
-            verifica el correo. No uses una contraseña que tengas en otros
-            servicios.
+            , selecciona «Crear cuenta» y completa el formulario. La cuenta se
+            guarda como demostración en este navegador; no se envía un correo
+            real. Después puedes simular la verificación e iniciar sesión. No
+            uses una contraseña que tengas en otros servicios.
           </>
         ),
       },
@@ -36,23 +36,25 @@ const helpSections = [
         question: "¿No tienes correo institucional?",
         answer: (
           <>
-            Si eres egresado/a o trabajas en la IU Pascual Bravo, puedes{" "}
+            Si eres egresado/a o trabajador/a y no tienes correo institucional,
+            puedes{" "}
             <Link
               href="/solicitar-acceso"
               className="text-(--fg) underline decoration-(--border-strong) underline-offset-4 hover:decoration-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
             >
               solicitar acceso
             </Link>
-            . Por ahora, la solicitud queda guardada únicamente en este
-            navegador: no se envía al administrador ni recibirás una respuesta
-            desde la plataforma.
+            . Si tienes correo institucional, regístrate o inicia sesión con
+            esa dirección. Por ahora, la solicitud queda guardada únicamente en
+            este navegador: no se envía al administrador ni recibirás una
+            respuesta desde la plataforma.
           </>
         ),
       },
       {
         question: "¿Puedo iniciar sesión o recuperar mi contraseña?",
         answer:
-          "Los formularios de inicio de sesión y recuperación son demostrativos. No autentican una cuenta y la recuperación no envía correos.",
+          "Puedes iniciar sesión con una cuenta de demostración creada en el mismo navegador. La recuperación de contraseña todavía no está disponible y no envía correos.",
       },
     ],
   },
@@ -61,9 +63,23 @@ const helpSections = [
     title: "Películas y eventos",
     items: [
       {
-        question: "¿Dónde puedo consultar películas, votar o ver funciones?",
-        answer:
-          "Las secciones de películas, votaciones, funciones y butacas todavía no están disponibles en este prototipo. Por eso, aún no se registran votos ni reservas.",
+        question: "¿Dónde puedo consultar películas, votaciones, funciones o butacas?",
+        answer: (
+          <>
+            Puedes consultar películas, funciones y ciclos de votación de
+            demostración. En{" "}
+            <Link
+              href="/eventos?tab=butacas"
+              className="text-(--fg) underline decoration-(--border-strong) underline-offset-4 hover:decoration-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+            >
+              Mis butacas
+            </Link>
+            , puedes revisar y responder invitaciones de ejemplo; las respuestas
+            se guardan en este navegador y no generan notificaciones reales.
+            Todavía no se registran votos; la acción de votar estará disponible
+            al habilitar el detalle de cada ciclo.
+          </>
+        ),
       },
     ],
   },
@@ -74,7 +90,7 @@ const helpSections = [
       {
         question: "¿Qué beneficios tendría la membresía?",
         answer:
-          "La propuesta contempla personalización del perfil, una insignia y participación prioritaria, como voto ponderado y creación de butacas compartidas. Estas funciones todavía no están disponibles.",
+          "La propuesta contempla personalización del perfil, una insignia y participación prioritaria, como el voto ponderado y la creación de butacas compartidas. Crear butacas está disponible para Miembros colaboradores con beneficios vigentes, desde el detalle de una función próxima. Puedes activar o restablecer una membresía colaboradora de prueba desde Mi suscripción; el cambio solo afecta esta cuenta en este navegador y no genera cobros ni transacciones.",
       },
       {
         question: "¿Se realiza algún cobro?",

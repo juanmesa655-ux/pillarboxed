@@ -19,8 +19,9 @@ export default function RequestAccessPage() {
             Solicitar acceso
           </h1>
           <p className="mt-4 mb-8 leading-7 text-(--fg-secondary)">
-            Si eres egresado/a o trabajas en la IU Pascual Bravo, cuéntanos un
-            poco sobre ti. Un administrador revisaría tu solicitud antes de
+            Si eres egresado/a o trabajador/a y no tienes correo institucional,
+            cuéntanos un poco sobre ti. Si tienes uno, regístrate o inicia sesión
+            con esa dirección. Un administrador revisaría la solicitud antes de
             habilitar el acceso.
           </p>
           <AccessRequestForm />

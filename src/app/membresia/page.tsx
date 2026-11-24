@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Check } from "lucide-react";
-import { AuthDialog } from "@/components/auth/auth-dialog";
 import { Footer } from "@/components/layout/footer";
+import { MembershipLoginAction } from "@/components/membership/membership-login-action";
 import { NavbarVisitante } from "@/components/layout/navbar-visitante";
 
 export const metadata: Metadata = {
@@ -119,11 +119,7 @@ export default function MembershipPage() {
                 automático.
               </p>
               <div className="mt-6">
-                <AuthDialog
-                  loginOnly
-                  loginLabel="Inicia sesión para continuar"
-                  loginButton
-                />
+                <MembershipLoginAction />
               </div>
             </article>
           </section>

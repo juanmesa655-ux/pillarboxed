@@ -30,15 +30,17 @@ const faqItems = [
     answer: (
       <>
         Puedes registrarte con tu correo institucional de la IU Pascual Bravo.
-        Si eres egresado/a o trabajas en la institución, puedes{" "}
+        Si eres egresado/a o trabajador/a y no tienes correo institucional,
+        puedes{" "}
         <Link
           href="/solicitar-acceso"
           className="text-(--fg) underline decoration-(--border-strong) underline-offset-4 hover:decoration-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
         >
           solicitar acceso
         </Link>
-        . En este prototipo, la solicitud solo se guarda en tu navegador y no se
-        envía a un administrador.
+        . Si tienes correo institucional, regístrate o inicia sesión con esa
+        dirección. En este prototipo, la solicitud solo se guarda en tu
+        navegador y no se envía a un administrador.
       </>
     ),
   },

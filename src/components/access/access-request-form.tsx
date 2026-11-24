@@ -48,9 +48,11 @@ export function AccessRequestForm() {
 
     if (!request.ok) {
       setError(
-        request.reason === "unavailable"
-          ? "No pudimos guardar la solicitud en este navegador. Inténtalo de nuevo."
-          : "No pudimos leer las solicitudes guardadas. Contacta a soporte.",
+        request.reason === "institutional-email"
+          ? "Si tienes correo institucional, regístrate o inicia sesión con esa dirección en lugar de solicitar acceso."
+          : request.reason === "unavailable"
+            ? "No pudimos guardar la solicitud en este navegador. Inténtalo de nuevo."
+            : "No pudimos leer las solicitudes guardadas. Contacta a soporte.",
       );
       return;
     }
@@ -87,9 +89,11 @@ export function AccessRequestForm() {
   return (
     <form className="space-y-5" onSubmit={handleSubmit}>
       <p className="border-l-2 border-(--info) bg-(--surface) px-4 py-3 text-sm leading-6 text-(--fg-secondary)">
-        El acceso sin correo institucional requiere aprobación de un
-        administrador. En esta versión de prueba, la solicitud solo se guarda
-        en este navegador.
+        Este formulario es solo para egresados/as y trabajadores/as que no
+        tienen correo institucional. Si tienes uno, regístrate o inicia sesión
+        con esa dirección. Las solicitudes requieren aprobación de un
+        administrador y, en esta versión de prueba, solo se guardan en este
+        navegador.
       </p>
 
       <div className="space-y-2">
@@ -140,7 +144,7 @@ export function AccessRequestForm() {
             Selecciona una opción
           </option>
           <option value="egresado">Egresado/a</option>
-          <option value="trabajador">Docente o trabajador/a</option>
+          <option value="trabajador">Trabajador/a sin correo institucional</option>
         </select>
       </div>
 

@@ -4,6 +4,8 @@ import {
   IBM_Plex_Mono,
   Newsreader,
 } from "next/font/google";
+import { SessionGate } from "@/components/auth/session-gate";
+import { SessionProvider } from "@/components/auth/session-provider";
 import "./globals.css";
 
 const hankenGrotesk = Hanken_Grotesk({
@@ -34,7 +36,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="es"
       className={`${hankenGrotesk.variable} ${newsreader.variable} ${ibmPlexMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full">{children}</body>
+      <body className="min-h-full">
+        <SessionProvider>
+          <SessionGate>{children}</SessionGate>
+        </SessionProvider>
+      </body>
     </html>
   );
 }

@@ -37,9 +37,10 @@ export default function TermsOfUsePage() {
               </h2>
               <p className="mt-3">
                 Pillarboxed es un prototipo para la comunidad cinéfila de la IU
-                Pascual Bravo. Sus formularios y flujos pueden ser
-                demostrativos; actualmente no se crean cuentas funcionales ni
-                se habilitan todas las funciones descritas en el proyecto.
+                Pascual Bravo. El registro y el inicio de sesión son
+                demostrativos: las cuentas y las sesiones se guardan en el
+                almacenamiento local de este navegador y no se verifican en un
+                servidor.
               </p>
             </section>
 
@@ -52,10 +53,10 @@ export default function TermsOfUsePage() {
               </h2>
               <p className="mt-3">
                 El acceso previsto es para personas de la comunidad
-                institucional y para egresados/as o trabajadores/as autorizados.
-                Los criterios definitivos, el proceso de verificación y las
-                responsabilidades de las cuentas deben ser confirmados por la
-                institución.
+                institucional con su correo institucional y para egresados/as o
+                trabajadores/as autorizados que no tengan uno. Los criterios
+                definitivos, el proceso de verificación y las responsabilidades
+                de las cuentas deben ser confirmados por la institución.
               </p>
             </section>
 

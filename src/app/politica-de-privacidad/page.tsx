@@ -51,10 +51,11 @@ export default function PrivacyPolicyPage() {
                 Datos y funcionamiento actual
               </h2>
               <p className="mt-3">
-                El formulario de registro es demostrativo: solicita nombre,
-                apellidos, correo institucional, carrera, semestre y
-                contraseña, pero no crea una cuenta ni guarda esos datos en un
-                servidor.
+                El registro de demostración solicita nombre, apellidos, correo
+                institucional, carrera, semestre y contraseña. La cuenta y la
+                sesión se guardan únicamente en el almacenamiento local de
+                este navegador; no se envían a un servidor de Pillarboxed. Usa
+                datos ficticios y no reutilices contraseñas de otros servicios.
               </p>
               <p className="mt-3">
                 El formulario de solicitud de acceso pide nombre, correo,

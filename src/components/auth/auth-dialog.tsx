@@ -2,12 +2,19 @@
 
 import { Dialog } from "@base-ui/react/dialog";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowRight, Eye, EyeOff, X } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { cn } from "cn";
+import { useSession } from "@/components/auth/session-provider";
 import { Button } from "@/components/ui/button";
+import {
+  authRepository,
+  careerOptions,
+  getMaxSemestersForCareer,
+} from "@/lib/data/auth-repository";
 
-type AuthMode = "login" | "recovery" | "registration";
+type AuthMode = "login" | "recovery" | "registration" | "verification";
 
 type PasswordFieldProps = {
   id: string;
@@ -15,6 +22,7 @@ type PasswordFieldProps = {
   label: string;
   autoComplete: string;
   onValueChange?: () => void;
+  minLength?: number;
 };
 
 type AuthDialogProps = {
@@ -33,6 +41,7 @@ function PasswordField({
   label,
   autoComplete,
   onValueChange,
+  minLength,
 }: PasswordFieldProps) {
   const [visible, setVisible] = useState(false);
 
@@ -47,6 +56,7 @@ function PasswordField({
           name={name}
           type={visible ? "text" : "password"}
           autoComplete={autoComplete}
+          minLength={minLength}
           onChange={onValueChange}
           required
           className="h-10 w-full rounded-[3px] border border-(--border-strong) bg-(--bg-center) px-3 pr-12 text-base text-(--fg) outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-(--surface-elevated) sm:h-11"
@@ -78,33 +88,147 @@ export function AuthDialog({
   loginLabel = "Iniciar sesión",
   loginButton = false,
 }: AuthDialogProps) {
+  const router = useRouter();
+  const { setAuthenticatedUser } = useSession();
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<AuthMode>("login");
   const [formError, setFormError] = useState("");
+  const [formNotice, setFormNotice] = useState("");
+  const [loginEmail, setLoginEmail] = useState("");
+  const [pendingEmail, setPendingEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedCareer, setSelectedCareer] = useState("");
+  const [selectedSemester, setSelectedSemester] = useState("");
+  const semesterLimit = getMaxSemestersForCareer(selectedCareer);
 
   function handleOpenChange(nextOpen: boolean) {
     setOpen(nextOpen);
     if (!nextOpen) {
       setMode("login");
       setFormError("");
+      setFormNotice("");
+      setSelectedCareer("");
+      setSelectedSemester("");
     }
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setFormError("");
+    setFormNotice("");
+    const formData = new FormData(event.currentTarget);
+
+    if (mode === "recovery") {
+      setFormNotice(
+        "La recuperación no envía correos en esta simulación. Usa el registro de prueba para crear una cuenta.",
+      );
+      return;
+    }
 
     if (mode === "registration") {
-      const formData = new FormData(event.currentTarget);
-      if (formData.get("password") !== formData.get("confirmPassword")) {
+      const password = String(formData.get("password") ?? "");
+      if (password !== String(formData.get("confirmPassword") ?? "")) {
         setFormError("Las contraseñas no coinciden.");
+        return;
       }
+
+      setIsSubmitting(true);
+      try {
+        const result = await authRepository.register({
+          firstName: String(formData.get("firstName") ?? ""),
+          lastName: String(formData.get("lastName") ?? ""),
+          email: String(formData.get("email") ?? ""),
+          career: String(formData.get("career") ?? ""),
+          semester: Number(formData.get("semester")),
+          password,
+        });
+
+        if (!result.ok) {
+          setFormError(
+            result.reason === "already-registered"
+              ? "Ya existe una cuenta de prueba con ese correo."
+              : result.reason === "invalid-email"
+                ? "Ingresa un correo válido."
+                : result.reason === "institutional-email-required"
+                  ? "Usa un correo que termine en @pascualbravo.edu.co."
+                : result.reason === "weak-password"
+                  ? "La contraseña debe tener al menos 8 caracteres."
+                  : result.reason === "unavailable"
+                    ? "El almacenamiento local no está disponible en este navegador."
+                    : "Revisa los datos e intenta de nuevo.",
+          );
+          return;
+        }
+
+        setPendingEmail(result.user.email);
+        setLoginEmail(result.user.email);
+        setMode("verification");
+      } finally {
+        setIsSubmitting(false);
+      }
+      return;
+    }
+
+    const email = String(formData.get("email") ?? "");
+    const password = String(formData.get("password") ?? "");
+    setIsSubmitting(true);
+    try {
+      const result = await authRepository.signIn(email, password);
+      if (!result.ok) {
+        if (result.reason === "pending-verification") {
+          setPendingEmail(email.trim());
+        }
+        setFormError(
+          result.reason === "invalid-credentials" ||
+            result.reason === "invalid-email" ||
+            result.reason === "institutional-email-required"
+            ? "Correo institucional o contraseña incorrectos."
+            : result.reason === "pending-verification"
+              ? "Esta cuenta de prueba está pendiente de verificación."
+              : result.reason === "unavailable"
+                ? "No pudimos guardar la sesión de prueba en este navegador."
+                : "No pudimos leer las cuentas de prueba. Recarga e intenta de nuevo.",
+        );
+        return;
+      }
+
+      setAuthenticatedUser(result.user);
+      setLoginEmail(result.user.email);
+      handleOpenChange(false);
+      router.push("/");
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
   function changeMode(nextMode: AuthMode) {
     setFormError("");
+    setFormNotice("");
+    if (nextMode === "registration") {
+      setSelectedCareer("");
+      setSelectedSemester("");
+    }
     setMode(nextMode);
+  }
+
+  function handleSimulatedVerification() {
+    setFormError("");
+    const result = authRepository.verifyEmail(pendingEmail);
+    if (!result.ok) {
+      setFormError(
+        result.reason === "unavailable"
+          ? "El almacenamiento local no está disponible en este navegador."
+          : "No pudimos activar la cuenta de prueba. Vuelve a registrarte.",
+      );
+      return;
+    }
+
+    setLoginEmail(result.user.email);
+    setPendingEmail("");
+    setFormNotice(
+      "Cuenta de prueba activada. Inicia sesión con el correo y la contraseña que registraste.",
+    );
+    setMode("login");
   }
 
   return (
@@ -148,7 +272,7 @@ export function AuthDialog({
         <Dialog.Popup
           className={cn(
             "fixed left-1/2 top-1/2 z-50 w-[calc(100vw-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 border border-border bg-(--surface-elevated) p-4 text-(--fg) sm:p-6",
-            mode === "registration" &&
+            (mode === "registration" || mode === "verification") &&
               "max-h-[calc(100dvh-2rem)] overflow-y-auto",
           )}
         >
@@ -158,7 +282,9 @@ export function AuthDialog({
                 ? "Ingresar a Pillarboxed"
                 : mode === "recovery"
                   ? "Reiniciar Contraseña"
-                  : "Unirse a Pillarboxed"}
+                  : mode === "verification"
+                    ? "Verificar cuenta de prueba"
+                    : "Unirse a Pillarboxed"}
             </Dialog.Title>
             <Dialog.Close
               render={
@@ -174,6 +300,20 @@ export function AuthDialog({
             </Dialog.Close>
           </div>
 
+          {formError && (
+            <p role="alert" className="mb-4 text-sm text-(--error)">
+              {formError}
+            </p>
+          )}
+          {formNotice && (
+            <p
+              role="status"
+              className="mb-4 text-sm leading-5 text-(--fg-secondary)"
+            >
+              {formNotice}
+            </p>
+          )}
+
           {mode === "login" && (
             <>
               <form className="space-y-3 sm:space-y-5" onSubmit={handleSubmit}>
@@ -182,23 +322,39 @@ export function AuthDialog({
                     htmlFor="login-email"
                     className="block text-sm font-medium"
                   >
-                    Correo
+                    Correo institucional
                   </label>
                   <input
                     id="login-email"
                     name="email"
                     type="email"
+                    value={loginEmail}
+                    onChange={(event) => {
+                      const nextEmail = event.target.value;
+                      setLoginEmail(nextEmail);
+                      if (
+                        nextEmail.trim().toLowerCase() !==
+                        pendingEmail.trim().toLowerCase()
+                      ) {
+                        setPendingEmail("");
+                      }
+                    }}
                     autoComplete="email"
+                    placeholder="nombre@pascualbravo.edu.co"
                     required
                     className="h-10 w-full rounded-[3px] border border-(--border-strong) bg-(--bg-center) px-3 text-base text-(--fg) outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-(--surface-elevated) sm:h-11"
                   />
                 </div>
+                <p className="-mt-2 text-xs leading-5 text-(--fg-muted)">
+                  Debe terminar en @pascualbravo.edu.co.
+                </p>
 
                 <PasswordField
                   id="login-password"
                   name="password"
                   label="Contraseña"
                   autoComplete="current-password"
+                  onValueChange={() => setFormError("")}
                 />
 
                 <button
@@ -211,11 +367,23 @@ export function AuthDialog({
 
                 <Button
                   type="submit"
+                  disabled={isSubmitting}
                   className="h-10 w-full rounded-[3px] bg-accent text-base font-semibold text-accent-foreground hover:bg-(--accent-hover) sm:h-11"
                 >
-                  Iniciar Sesión
+                  {isSubmitting ? "Ingresando..." : "Iniciar Sesión"}
                 </Button>
               </form>
+
+              {pendingEmail && (
+                <Button
+                  type="button"
+                  variant="link"
+                  className="mt-3 h-auto w-full whitespace-normal text-sm text-accent"
+                  onClick={handleSimulatedVerification}
+                >
+                  Simular verificación de cuenta pendiente
+                </Button>
+              )}
 
               <p className="mt-4 text-center text-sm text-(--fg-secondary) sm:mt-6">
                 ¿No tienes cuenta?{" "}
@@ -233,8 +401,9 @@ export function AuthDialog({
           {mode === "recovery" && (
             <form className="space-y-4" onSubmit={handleSubmit}>
               <p className="text-center text-sm leading-6 text-(--fg-secondary)">
-                Ingresa tu correo institucional y un link de recuperación será
-                enviado para reiniciar tu contraseña.
+                La recuperación de contraseña estará disponible cuando la
+                aplicación tenga un servidor. En esta versión no se envían
+                correos.
               </p>
               <div>
                 <label htmlFor="recovery-email" className="sr-only">
@@ -255,13 +424,17 @@ export function AuthDialog({
                 type="submit"
                 className="h-10 w-full rounded-[3px] bg-accent text-base font-semibold text-accent-foreground hover:bg-(--accent-hover) sm:h-11"
               >
-                Enviar
+                Continuar
               </Button>
             </form>
           )}
 
           {mode === "registration" && (
             <form className="space-y-3" onSubmit={handleSubmit}>
+              <p className="text-xs leading-5 text-(--fg-muted)">
+                Registro de demostración: no se envía un correo real. Usa datos
+                ficticios.
+              </p>
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <label
@@ -309,9 +482,13 @@ export function AuthDialog({
                   name="email"
                   type="email"
                   autoComplete="email"
+                  placeholder="nombre@pascualbravo.edu.co"
                   required
                   className="h-10 w-full rounded-[3px] border border-(--border-strong) bg-(--bg-center) px-3 text-base text-(--fg) outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-(--surface-elevated)"
                 />
+                <p className="text-xs leading-5 text-(--fg-muted)">
+                  Debe terminar en @pascualbravo.edu.co.
+                </p>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
@@ -322,14 +499,26 @@ export function AuthDialog({
                   >
                     Carrera
                   </label>
-                  <input
+                  <select
                     id="registration-career"
                     name="career"
-                    type="text"
-                    maxLength={120}
                     required
+                    value={selectedCareer}
+                    onChange={(event) => {
+                      setSelectedCareer(event.target.value);
+                      setSelectedSemester("");
+                    }}
                     className="h-10 w-full rounded-[3px] border border-(--border-strong) bg-(--bg-center) px-3 text-base text-(--fg) outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-(--surface-elevated)"
-                  />
+                  >
+                    <option value="" disabled>
+                      Selecciona una carrera
+                    </option>
+                    {careerOptions.map((career) => (
+                      <option key={career.value} value={career.value}>
+                        {career.value}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="space-y-1">
                   <label
@@ -338,15 +527,32 @@ export function AuthDialog({
                   >
                     Semestre
                   </label>
-                  <input
+                  <select
                     id="registration-semester"
                     name="semester"
-                    type="number"
-                    min={1}
-                    step={1}
                     required
+                    value={selectedSemester}
+                    onChange={(event) =>
+                      setSelectedSemester(event.target.value)
+                    }
+                    disabled={semesterLimit === null}
                     className="h-10 w-full rounded-[3px] border border-(--border-strong) bg-(--bg-center) px-3 text-base text-(--fg) outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-(--surface-elevated)"
-                  />
+                  >
+                    <option value="" disabled>
+                      {semesterLimit === null
+                        ? "Selecciona primero una carrera"
+                        : "Selecciona un semestre"}
+                    </option>
+                    {semesterLimit !== null &&
+                      Array.from(
+                        { length: semesterLimit },
+                        (_, index) => index + 1,
+                      ).map((semester) => (
+                        <option key={semester} value={semester}>
+                          {semester}
+                        </option>
+                      ))}
+                  </select>
                 </div>
               </div>
 
@@ -356,6 +562,7 @@ export function AuthDialog({
                 label="Contraseña"
                 autoComplete="new-password"
                 onValueChange={() => setFormError("")}
+                minLength={8}
               />
               <PasswordField
                 id="registration-confirm-password"
@@ -363,6 +570,7 @@ export function AuthDialog({
                 label="Confirmar contraseña"
                 autoComplete="new-password"
                 onValueChange={() => setFormError("")}
+                minLength={8}
               />
 
               <label className="flex items-start gap-2 text-sm leading-5 text-(--fg-secondary)">
@@ -402,19 +610,31 @@ export function AuthDialog({
                 </label>
               </div>
 
-              {formError && (
-                <p role="alert" className="text-sm text-(--error)">
-                  {formError}
-                </p>
-              )}
-
               <Button
                 type="submit"
+                disabled={isSubmitting}
                 className="h-10 w-full rounded-[3px] bg-accent text-base font-semibold text-accent-foreground hover:bg-(--accent-hover)"
               >
-                Crear cuenta
+                {isSubmitting ? "Creando cuenta..." : "Crear cuenta"}
               </Button>
             </form>
+          )}
+
+          {mode === "verification" && (
+            <div className="space-y-4">
+              <p className="text-sm leading-6 text-(--fg-secondary)">
+                En un sistema real te enviaríamos un correo. Para probar el
+                acceso, activa esta cuenta ficticia aquí; no se enviará ningún
+                mensaje.
+              </p>
+              <Button
+                type="button"
+                onClick={handleSimulatedVerification}
+                className="h-10 w-full rounded-[3px] bg-accent text-base font-semibold text-accent-foreground hover:bg-(--accent-hover)"
+              >
+                Simular verificación y continuar
+              </Button>
+            </div>
           )}
         </Dialog.Popup>
       </Dialog.Portal>
