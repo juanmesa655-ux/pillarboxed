@@ -28,12 +28,14 @@ La clave de TMDB se solicita desde la sección **API** de la configuración de u
 cuenta de [TMDB](https://www.themoviedb.org/settings/api). Crear este repositorio
 no genera ni habilita una clave.
 
-Cuando se integre TMDB, guarda la clave en `.env.local` usando la variable
-`TMDB_API_KEY`. No uses el prefijo `NEXT_PUBLIC_` ni publiques la clave. Los
-archivos `.env*` están excluidos de Git; `.env.example` solo sirve como plantilla.
+Guarda la clave localmente en `.env.local` con el nombre `TMDB_API_KEY`. No uses
+el prefijo `NEXT_PUBLIC_` ni publiques la clave. Los archivos de entorno con
+secretos están excluidos de Git; `.env.example` es la plantilla pública.
 
-La integración de TMDB mediante un Route Handler aún está pendiente en este
-prototipo.
+El catálogo consulta las películas en tendencia a través de
+`/api/tmdb/trending`. La clave solo se utiliza en el Route Handler del servidor.
+La aplicación todavía es un prototipo: el inicio de sesión y los pagos son
+simulados.
 
 ## Alcance actual
 

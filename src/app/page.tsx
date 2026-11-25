@@ -31,6 +31,12 @@ export default function Home() {
                     registrationButtonClassName="h-12 rounded-[3px] bg-accent px-6 text-base font-semibold text-accent-foreground hover:bg-(--accent-hover)"
                   />
                   <Link
+                    href="/peliculas"
+                    className="text-sm text-(--fg-secondary) underline decoration-border underline-offset-4 hover:text-(--fg)"
+                  >
+                    Explorar películas
+                  </Link>
+                  <Link
                     href="/solicitar-acceso"
                     className="text-sm text-(--fg-secondary) underline decoration-border underline-offset-4 hover:text-(--fg)"
                   >

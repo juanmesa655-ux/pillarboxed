@@ -4,6 +4,7 @@ import packageInfo from "../../../package.json";
 import { PillarboxedLogo } from "@/components/layout/pillarboxed-logo";
 
 const footerItems: { label: string; href?: string }[] = [
+  { label: "Películas", href: "/peliculas" },
   { label: "Acerca de Pillarboxed", href: "/acerca-de" },
   { label: "Ayuda", href: "/ayuda" },
   { label: "Política de Privacidad", href: "/politica-de-privacidad" },
