@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Clock3, Star } from "lucide-react";
+import { Clock3, Star } from "lucide-react";
 import { useSession } from "@/components/auth/session-provider";
 import { Footer } from "@/components/layout/footer";
 import { NavbarSesion } from "@/components/layout/navbar-sesion";
@@ -196,22 +196,18 @@ export function ProtectedMovieDetailPage({ movieId }: { movieId: number }) {
     ? `https://image.tmdb.org/t/p/w1280${movie.backdropPath}`
     : null;
   const visibleCredits = movie ? getVisibleCredits(movie.crew) : [];
+  const directors =
+    movie?.crew
+      .filter((credit) => credit.job === "Director")
+      .map((credit) => credit.name) ?? [];
 
   return (
     <div className="flex min-h-screen flex-col">
       <div className="site-frame flex-1">
         <NavbarSesion />
-        <main className="mx-auto max-w-300 px-4 py-7 sm:px-6 sm:py-10">
-          <Link
-            href="/peliculas"
-            className="inline-flex items-center gap-2 text-sm text-(--fg-secondary) hover:text-(--fg) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
-          >
-            <ArrowLeft aria-hidden="true" size={16} />
-            Volver a películas
-          </Link>
-
+        <main className="mx-auto max-w-300 px-4 pb-7 sm:px-6 sm:pb-10">
           {state.status === "loading" && (
-            <div className="mt-5">
+            <div>
               <DetailLoadingState />
             </div>
           )}
@@ -246,7 +242,7 @@ export function ProtectedMovieDetailPage({ movieId }: { movieId: number }) {
 
           {movie && (
             <>
-              <header className="relative isolate mt-5 overflow-hidden border-b border-border bg-(--surface)">
+              <header className="relative isolate overflow-hidden border-b border-border bg-(--surface)">
                 {backdropUrl && (
                   <Image
                     src={backdropUrl}
@@ -263,10 +259,7 @@ export function ProtectedMovieDetailPage({ movieId }: { movieId: number }) {
                 />
                 <div className="relative flex min-h-64 items-end px-5 py-7 sm:min-h-80 sm:px-8 sm:py-9">
                   <div className="max-w-4xl">
-                    <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent">
-                      Detalle de película
-                    </p>
-                    <h1 className="mt-3 font-(family-name:--font-title) text-4xl font-semibold leading-tight text-(--fg) sm:text-5xl lg:text-6xl">
+                    <h1 className="font-(family-name:--font-title) text-4xl font-semibold leading-tight text-(--fg) sm:text-5xl lg:text-6xl">
                       {movie.title}
                     </h1>
                     {movie.tagline && (
@@ -279,7 +272,7 @@ export function ProtectedMovieDetailPage({ movieId }: { movieId: number }) {
               </header>
 
               <div className="grid gap-7 border-b border-border py-7 sm:gap-9 sm:py-9 md:grid-cols-[minmax(0,15rem)_1fr]">
-                <div className="mx-auto w-full max-w-60">
+                <div className="mx-auto w-full max-w-60 md:mx-0">
                   <div className="relative aspect-2/3 overflow-hidden border border-border bg-(--surface)">
                     {posterUrl ? (
                       <Image
@@ -300,10 +293,7 @@ export function ProtectedMovieDetailPage({ movieId }: { movieId: number }) {
                       </div>
                     )}
                   </div>
-                </div>
-
-                <div className="min-w-0">
-                  <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-border pb-5 font-mono text-xs text-(--fg-secondary) sm:text-sm">
+                  <div className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 border-y border-border py-4 font-mono text-xs text-(--fg-secondary) sm:text-sm md:justify-start">
                     <span>{year ?? "Año no disponible"}</span>
                     <span className="inline-flex items-center gap-1.5">
                       <Clock3 aria-hidden="true" size={15} />
@@ -316,11 +306,39 @@ export function ProtectedMovieDetailPage({ movieId }: { movieId: number }) {
                         : `${movie.voteAverage.toFixed(1)} / 10`}
                     </span>
                   </div>
+                </div>
 
-                  <section className="border-b border-border py-5" aria-labelledby="genres-title">
+                <div className="min-w-0">
+                  <section
+                    className="border-b border-border py-5"
+                    aria-label="Sinopsis"
+                  >
+                    <p className="whitespace-pre-line text-sm leading-7 text-(--fg-secondary) sm:text-base">
+                      {movie.overview || "Sinopsis no disponible."}
+                    </p>
+                  </section>
+
+                  <section
+                    className="border-b border-border py-5"
+                    aria-labelledby="director-title"
+                  >
+                    <h2
+                      id="director-title"
+                      className="text-sm font-medium text-(--fg-secondary)"
+                    >
+                      Director
+                    </h2>
+                    <p className="mt-2 text-sm leading-6 text-(--fg-secondary)">
+                      {directors.length > 0
+                        ? directors.join(" · ")
+                        : "Director no disponible."}
+                    </p>
+                  </section>
+
+                  <section className="pt-5" aria-labelledby="genres-title">
                     <h2
                       id="genres-title"
-                      className="font-mono text-xs uppercase tracking-[0.14em] text-(--fg-muted)"
+                      className="text-sm font-medium text-(--fg-secondary)"
                     >
                       Géneros
                     </h2>
@@ -330,29 +348,14 @@ export function ProtectedMovieDetailPage({ movieId }: { movieId: number }) {
                         : "Géneros no disponibles."}
                     </p>
                   </section>
-
-                  <section className="pt-5" aria-labelledby="synopsis-title">
-                    <h2
-                      id="synopsis-title"
-                      className="font-(family-name:--font-title) text-2xl font-semibold text-(--fg)"
-                    >
-                      Sinopsis
-                    </h2>
-                    <p className="mt-3 whitespace-pre-line text-sm leading-7 text-(--fg-secondary) sm:text-base">
-                      {movie.overview || "Sinopsis no disponible."}
-                    </p>
-                  </section>
                 </div>
               </div>
 
               <section className="border-b border-border py-7 sm:py-9" aria-labelledby="cast-title">
                 <div className="mb-5">
-                  <p className="font-mono text-xs uppercase tracking-[0.14em] text-accent">
-                    En pantalla
-                  </p>
                   <h2
                     id="cast-title"
-                    className="mt-2 font-(family-name:--font-title) text-2xl font-semibold text-(--fg) sm:text-3xl"
+                    className="font-(family-name:--font-title) text-2xl font-semibold text-(--fg) sm:text-3xl"
                   >
                     Reparto
                   </h2>
@@ -377,12 +380,9 @@ export function ProtectedMovieDetailPage({ movieId }: { movieId: number }) {
 
               <section className="border-b border-border py-7 sm:py-9" aria-labelledby="credits-title">
                 <div className="mb-5">
-                  <p className="font-mono text-xs uppercase tracking-[0.14em] text-accent">
-                    Detrás de cámara
-                  </p>
                   <h2
                     id="credits-title"
-                    className="mt-2 font-(family-name:--font-title) text-2xl font-semibold text-(--fg) sm:text-3xl"
+                    className="font-(family-name:--font-title) text-2xl font-semibold text-(--fg) sm:text-3xl"
                   >
                     Créditos principales
                   </h2>
@@ -410,12 +410,9 @@ export function ProtectedMovieDetailPage({ movieId }: { movieId: number }) {
 
               <section className="py-7 sm:py-9" aria-labelledby="similar-title">
                 <div className="mb-5">
-                  <p className="font-mono text-xs uppercase tracking-[0.14em] text-accent">
-                    Sigue explorando
-                  </p>
                   <h2
                     id="similar-title"
-                    className="mt-2 font-(family-name:--font-title) text-2xl font-semibold text-(--fg) sm:text-3xl"
+                    className="font-(family-name:--font-title) text-2xl font-semibold text-(--fg) sm:text-3xl"
                   >
                     Películas similares
                   </h2>

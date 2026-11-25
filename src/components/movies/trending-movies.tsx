@@ -18,26 +18,52 @@ type CatalogState =
       reason: Exclude<Extract<TrendingMoviesResult, { ok: false }>["reason"], "aborted">;
     };
 
-function LoadingMovies({ layout }: { layout: "grid" | "horizontal" }) {
+type TrendingMoviesLayout = "grid" | "horizontal" | "featured-poster";
+
+function LoadingMovies({
+  layout,
+  source,
+}: {
+  layout: TrendingMoviesLayout;
+  source: "trending" | "classics";
+}) {
     const listClassName =
-      layout === "horizontal"
-        ? "flex gap-4 overflow-x-auto pb-2 sm:gap-6"
+      layout === "featured-poster"
+        ? "mx-auto w-full max-w-80 lg:mx-0"
+        : layout === "horizontal"
+        ? "flex gap-4 overflow-x-auto pb-2 sm:gap-6 lg:justify-center lg:gap-4 lg:overflow-x-visible"
         : "grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 2xl:grid-cols-5";
+  const skeletonCount =
+    layout === "featured-poster" ? 1 : layout === "horizontal" ? 6 : 10;
 
   return (
       <ul
         className={listClassName}
       role="status"
-      aria-label="Cargando películas populares"
+      aria-label={
+        source === "classics"
+          ? "Cargando películas clásicas"
+          : "Cargando películas populares"
+      }
     >
-        {Array.from({ length: layout === "horizontal" ? 5 : 10 }, (_, index) => (
+        {Array.from({ length: skeletonCount }, (_, index) => (
           <li
             key={index}
-            className={`${layout === "horizontal" ? "w-36 shrink-0 sm:w-44" : ""} animate-pulse`}
+            className={`${
+              layout === "featured-poster"
+                ? ""
+                : layout === "horizontal"
+                  ? "w-36 shrink-0 sm:w-44 lg:w-[calc((100%_-_5rem)/6)] lg:max-w-44"
+                  : ""
+            } animate-pulse`}
           >
             <div className="aspect-2/3 border border-border bg-(--surface)" />
-            <div className="mt-3 h-4 w-3/4 bg-(--surface)" />
-            <div className="mt-2 h-3 w-1/2 bg-(--surface)" />
+            {layout === "grid" && (
+              <>
+                <div className="mt-3 h-4 w-3/4 bg-(--surface)" />
+                <div className="mt-2 h-3 w-1/2 bg-(--surface)" />
+              </>
+            )}
           </li>
       ))}
       </ul>
@@ -59,17 +85,23 @@ function errorMessage(
 export function TrendingMovies({
   layout = "grid",
   limit,
+  source = "trending",
 }: {
-  layout?: "grid" | "horizontal";
+  layout?: TrendingMoviesLayout;
   limit?: number;
+  source?: "trending" | "classics";
 }) {
   const [attempt, setAttempt] = useState(0);
   const [state, setState] = useState<CatalogState>({ status: "loading" });
 
   useEffect(() => {
     const controller = new AbortController();
+    const request =
+      source === "classics"
+        ? tmdbMovieRepository.getClassics(controller.signal)
+        : tmdbMovieRepository.getTrending(controller.signal);
 
-    void tmdbMovieRepository.getTrending(controller.signal).then((result) => {
+    void request.then((result) => {
       if (controller.signal.aborted) return;
 
       if (result.ok) {
@@ -87,16 +119,18 @@ export function TrendingMovies({
     });
 
     return () => controller.abort();
-  }, [attempt]);
+  }, [attempt, source]);
 
   if (state.status === "loading") {
-    return <LoadingMovies layout={layout} />;
+    return <LoadingMovies layout={layout} source={source} />;
   }
 
   if (state.status === "empty") {
     return (
       <p className="border-y border-border py-8 text-(--fg-secondary)" role="status">
-        No hay películas populares disponibles en este momento.
+        {source === "classics"
+          ? "No hay películas clásicas disponibles en este momento."
+          : "No hay películas populares disponibles en este momento."}
       </p>
     );
   }
@@ -122,21 +156,48 @@ export function TrendingMovies({
 
   const movies = limit === undefined ? state.movies : state.movies.slice(0, limit);
   const listClassName =
-    layout === "horizontal"
-      ? "flex gap-4 overflow-x-auto pb-2 sm:gap-6"
+    layout === "featured-poster"
+      ? "mx-auto w-full max-w-80 lg:mx-0"
+      : layout === "horizontal"
+      ? "flex gap-4 overflow-x-auto pb-2 sm:gap-6 lg:justify-center lg:gap-4 lg:overflow-x-visible"
       : "grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 2xl:grid-cols-5";
+  const visibleMovies =
+    layout === "featured-poster"
+      ? [
+          movies.find(
+            (movie) =>
+              movie.posterPath !== null && /odisea|odyssey/i.test(movie.title),
+          ) ?? movies.find((movie) => movie.posterPath !== null),
+        ].filter((movie): movie is MovieSummary => movie !== undefined)
+      : movies;
+
+  if (layout === "featured-poster" && visibleMovies.length === 0) {
+    return (
+      <p className="border-y border-border py-8 text-(--fg-secondary)" role="status">
+        No hay pósteres disponibles en este momento.
+      </p>
+    );
+  }
 
   return (
     <ul className={listClassName}>
-      {movies.map((movie, index) => (
+      {visibleMovies.map((movie, index) => (
         <li
           key={movie.id}
-          className={layout === "horizontal" ? "w-36 shrink-0 sm:w-44" : ""}
+          className={
+            layout === "featured-poster"
+              ? ""
+              : layout === "horizontal"
+                ? "w-36 shrink-0 sm:w-44 lg:w-[calc((100%_-_5rem)/6)] lg:max-w-44"
+                : ""
+          }
         >
           <MovieCard
             movie={movie}
             compact={layout === "horizontal"}
             priority={index === 0}
+            posterOnly={layout === "featured-poster"}
+            hideDetails={layout === "horizontal"}
           />
         </li>
       ))}

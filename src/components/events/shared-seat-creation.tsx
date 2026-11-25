@@ -165,12 +165,9 @@ function SharedSeatCreationForUser({
         aria-labelledby="seat-event-heading"
         className="border-y border-border py-6 sm:py-8"
       >
-        <p className="text-xs uppercase tracking-[0.12em] text-(--fg-muted)">
-          Detalle de función
-        </p>
         <h2
           id="seat-event-heading"
-          className="mt-2 font-(family-name:--font-title) text-3xl font-semibold text-(--fg) sm:text-4xl"
+          className="font-(family-name:--font-title) text-3xl font-semibold text-(--fg) sm:text-4xl"
         >
           {cineFunction.title}
         </h2>

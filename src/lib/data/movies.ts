@@ -70,6 +70,7 @@ export type SearchMoviesResult =
 
 export interface MovieRepository {
   getTrending(signal: AbortSignal): Promise<TrendingMoviesResult>;
+  getClassics(signal: AbortSignal): Promise<TrendingMoviesResult>;
   getMovieDetails(
     id: number,
     signal: AbortSignal,
@@ -170,6 +171,52 @@ function isTrendingMoviesPayload(
   );
 }
 
+async function getMovieList(
+  path: string,
+  signal: AbortSignal,
+): Promise<TrendingMoviesResult> {
+  let response: Response;
+
+  try {
+    response = await fetch(path, {
+      signal,
+      cache: "no-store",
+      headers: { Accept: "application/json" },
+    });
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      return { ok: false, reason: "aborted" };
+    }
+    if (error instanceof TypeError) {
+      return { ok: false, reason: "unavailable" };
+    }
+    throw error;
+  }
+
+  if (response.status === 503) {
+    return { ok: false, reason: "not-configured" };
+  }
+  if (!response.ok) {
+    return { ok: false, reason: "unavailable" };
+  }
+
+  let payload: unknown;
+  try {
+    payload = await response.json();
+  } catch (error) {
+    if (error instanceof SyntaxError) {
+      return { ok: false, reason: "invalid-data" };
+    }
+    throw error;
+  }
+
+  if (!isTrendingMoviesPayload(payload)) {
+    return { ok: false, reason: "invalid-data" };
+  }
+
+  return { ok: true, movies: payload.movies };
+}
+
 function isSearchMoviesPayload(
   value: unknown,
 ): value is { movies: MovieSummary[]; totalResults: number } {
@@ -184,47 +231,12 @@ function isSearchMoviesPayload(
 }
 
 export const tmdbMovieRepository: MovieRepository = {
-  async getTrending(signal) {
-    let response: Response;
+  getTrending(signal) {
+    return getMovieList("/api/tmdb/trending", signal);
+  },
 
-    try {
-      response = await fetch("/api/tmdb/trending", {
-        signal,
-        cache: "no-store",
-        headers: { Accept: "application/json" },
-      });
-    } catch (error) {
-      if (error instanceof DOMException && error.name === "AbortError") {
-        return { ok: false, reason: "aborted" };
-      }
-      if (error instanceof TypeError) {
-        return { ok: false, reason: "unavailable" };
-      }
-      throw error;
-    }
-
-    if (response.status === 503) {
-      return { ok: false, reason: "not-configured" };
-    }
-    if (!response.ok) {
-      return { ok: false, reason: "unavailable" };
-    }
-
-    let payload: unknown;
-    try {
-      payload = await response.json();
-    } catch (error) {
-      if (error instanceof SyntaxError) {
-        return { ok: false, reason: "invalid-data" };
-      }
-      throw error;
-    }
-
-    if (!isTrendingMoviesPayload(payload)) {
-      return { ok: false, reason: "invalid-data" };
-    }
-
-    return { ok: true, movies: payload.movies };
+  getClassics(signal) {
+    return getMovieList("/api/tmdb/classics", signal);
   },
 
   async getMovieDetails(id, signal) {

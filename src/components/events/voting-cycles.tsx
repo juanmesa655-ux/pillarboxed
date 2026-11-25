@@ -1,8 +1,12 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { CalendarDays, Clock3, Film } from "lucide-react";
 import type {
   VotingCycle,
   VotingCycleStatus,
 } from "@/lib/data/voting-cycles";
+import { curationRepository } from "@/lib/data/curation-repository";
 
 const cycleGroups: {
   status: VotingCycleStatus;
@@ -39,7 +43,32 @@ function formatCycleTime(value: string) {
 }
 
 export function VotingCycles({ cycles }: { cycles: VotingCycle[] }) {
-  if (cycles.length === 0) {
+  const [publicCycles, setPublicCycles] = useState(cycles);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+    Promise.resolve().then(() => {
+      if (cancelled) return;
+      const result = curationRepository.getPublicCycles();
+      if (!result.ok) {
+        setError(
+          result.reason === "invalid-data"
+            ? "No pudimos leer los ciclos guardados. Revisa los datos locales e inténtalo de nuevo."
+            : "No pudimos cargar los ciclos. Habilita el almacenamiento local e inténtalo de nuevo.",
+        );
+        return;
+      }
+
+      setPublicCycles(result.cycles);
+      setError("");
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (publicCycles.length === 0) {
     return (
       <section
         className="border-y border-border py-12 text-center"
@@ -52,6 +81,11 @@ export function VotingCycles({ cycles }: { cycles: VotingCycle[] }) {
         <p className="mt-2 text-sm text-(--fg-secondary)">
           Vuelve pronto para elegir las próximas películas del cineclub.
         </p>
+        {error && (
+          <p className="mt-3 text-sm text-(--error)" role="alert">
+            {error}
+          </p>
+        )}
       </section>
     );
   }
@@ -62,10 +96,15 @@ export function VotingCycles({ cycles }: { cycles: VotingCycle[] }) {
         Las votaciones son de demostración. Un voto por ciclo: pesa x1 sin
         suscripción activa y x2 con una activa; el peso queda guardado al votar.
       </p>
+      {error && (
+        <p className="mb-5 text-sm text-(--error)" role="alert">
+          {error}
+        </p>
+      )}
 
       <div className="space-y-9" aria-live="polite">
         {cycleGroups.map((group) => {
-          const groupCycles = cycles.filter(
+          const groupCycles = publicCycles.filter(
             (cycle) => cycle.status === group.status,
           );
           if (groupCycles.length === 0) return null;
@@ -93,7 +132,7 @@ export function VotingCycles({ cycles }: { cycles: VotingCycle[] }) {
                   >
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-3">
-                        <p className="text-xs uppercase tracking-[0.12em] text-(--fg-muted)">
+                        <p className="text-sm text-(--fg-muted)">
                           Ciclo de votación
                         </p>
                         <span
@@ -133,8 +172,8 @@ export function VotingCycles({ cycles }: { cycles: VotingCycle[] }) {
                           {formatCycleTime(cycle.closesAt)}
                         </span>
                         <span>
-                          {cycle.candidateCount}{" "}
-                          {cycle.candidateCount === 1
+                          {cycle.candidates.length}{" "}
+                          {cycle.candidates.length === 1
                             ? "candidata"
                             : "candidatas"}
                         </span>

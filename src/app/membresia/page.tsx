@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Check } from "lucide-react";
 import { Footer } from "@/components/layout/footer";
-import { MembershipLoginAction } from "@/components/membership/membership-login-action";
+import { MembershipPlanOffer } from "@/components/membership/membership-plan-offer";
 import { NavbarVisitante } from "@/components/layout/navbar-visitante";
+import { COLLABORATOR_PLAN_BENEFITS } from "@/lib/data/membership-plans";
 
 export const metadata: Metadata = {
   title: "Membresías | Pillarboxed",
@@ -16,13 +17,6 @@ const memberBenefits = [
   "Votar en ciclos con peso x1",
   "Recibir y responder invitaciones a butacas",
   "Notificaciones internas",
-];
-
-const collaboratorBenefits = [
-  "Voto con peso x2",
-  "Crear butacas compartidas",
-  "Personalizar el perfil",
-  "Insignia de verificación «Colaborador»",
 ];
 
 function BenefitList({ items }: { items: string[] }) {
@@ -85,43 +79,17 @@ export default function MembershipPage() {
               </p>
             </article>
 
-            <article className="border border-(--accent)/60 bg-(--surface) p-6 sm:p-8">
-              <header>
-                <h2 className="font-(family-name:--font-title) text-3xl font-semibold text-(--fg)">
-                  Miembro colaborador
-                </h2>
-              </header>
-
-              <dl className="mt-6 grid grid-cols-2 gap-4 border-y border-border py-4">
-                <div>
-                  <dt className="text-xs text-(--fg-muted)">
-                    Precio provisional
-                  </dt>
-                  <dd className="mt-1 text-lg font-semibold text-(--fg)">
-                    $20.000 COP
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-xs text-(--fg-muted)">Duración</dt>
-                  <dd className="mt-1 text-sm text-(--fg)">
-                    Un semestre
-                  </dd>
-                </div>
-              </dl>
-
+            <MembershipPlanOffer>
               <p className="mt-5 text-sm text-(--fg-secondary)">
                 Además de los beneficios de Miembro:
               </p>
-              <BenefitList items={collaboratorBenefits} />
+              <BenefitList items={COLLABORATOR_PLAN_BENEFITS} />
               <p className="mt-5 text-xs leading-5 text-(--fg-muted)">
                 Si cancelas, conservas estos beneficios hasta el final del
                 periodo pagado. La cancelación no genera un reembolso
                 automático.
               </p>
-              <div className="mt-6">
-                <MembershipLoginAction />
-              </div>
-            </article>
+            </MembershipPlanOffer>
           </section>
 
           <p className="mt-8 text-sm leading-6 text-(--fg-secondary)">

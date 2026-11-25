@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useSession } from "@/components/auth/session-provider";
 import {
   getMembershipTier,
@@ -52,56 +53,34 @@ export function DemoMembershipControl() {
 }
 
 function DemoMembershipControlForUser({ userId }: { userId: string }) {
-  const [membershipState, setMembershipState] = useState(() =>
-    membershipRepository.getSubscription(userId),
-  );
-  const [error, setError] = useState("");
-  const [notice, setNotice] = useState("");
-
-  function activateDemoMembership() {
-    setError("");
-    setNotice("");
-    const result = membershipRepository.activateDemoMembership(userId);
-    if (!result.ok) {
-      if (result.reason === "already-collaborator") {
-        setError("Esta cuenta ya tiene beneficios de Miembro colaborador.");
-        setMembershipState(membershipRepository.getSubscription(userId));
-        return;
-      }
-      setError(
-        result.reason === "invalid-data"
-          ? "No pudimos leer la membresía guardada. Revisa los datos locales e inténtalo de nuevo."
-          : "No pudimos guardar la membresía de prueba. Habilita el almacenamiento local e inténtalo de nuevo.",
-      );
-      return;
-    }
-
-    setMembershipState({ ok: true, subscription: result.subscription });
-    setNotice(
-      "Membresía colaboradora de prueba activada para esta cuenta en este navegador. No se realizó ningún cobro.",
+  const [membershipState, setMembershipState] =
+    useState<ReturnType<typeof membershipRepository.getSubscription> | null>(
+      null,
     );
-  }
 
-  function resetToMember() {
-    setError("");
-    setNotice("");
-    const result = membershipRepository.resetToMember(userId);
-    if (!result.ok) {
-      setError(
-        result.reason === "invalid-data"
-          ? "No pudimos leer la membresía guardada. Revisa los datos locales e inténtalo de nuevo."
-          : "No pudimos restablecer la cuenta. Habilita el almacenamiento local e inténtalo de nuevo.",
-      );
-      return;
-    }
+  useEffect(() => {
+    let active = true;
+    Promise.resolve().then(() => {
+      if (active) {
+        setMembershipState(membershipRepository.getSubscription(userId));
+      }
+    });
 
-    setMembershipState({ ok: true, subscription: null });
-    setNotice("La cuenta volvió al nivel Miembro de prueba.");
-  }
+    return () => {
+      active = false;
+    };
+  }, [userId]);
 
   function retryLoad() {
     setMembershipState(membershipRepository.getSubscription(userId));
-    setError("");
+  }
+
+  if (membershipState === null) {
+    return (
+      <p className="text-sm text-(--fg-secondary)" role="status">
+        Cargando tu suscripción...
+      </p>
+    );
   }
 
   if (!membershipState.ok) {
@@ -129,21 +108,18 @@ function DemoMembershipControlForUser({ userId }: { userId: string }) {
   return (
     <div>
       <aside className="border-l-2 border-(--info) bg-(--info)/10 px-4 py-3 text-sm leading-6 text-(--fg-secondary)">
-        Esta herramienta es solo para demostraciones. No realiza cobros, no crea
-        transacciones ni envía notificaciones; el cambio se guarda únicamente en
-        este navegador y afecta solo a esta cuenta.
+        Esta versión permite probar el flujo de compra y renovación. No realiza
+        cobros reales; las transacciones y el estado de membresía se guardan
+        solo en este navegador.
       </aside>
 
       <section
         className="mt-6 border border-border bg-(--surface) p-5 sm:p-7"
         aria-labelledby="membership-status-heading"
       >
-        <p className="text-xs uppercase tracking-[0.12em] text-(--fg-muted)">
-          Nivel de membresía
-        </p>
         <h2
           id="membership-status-heading"
-          className="mt-2 font-(family-name:--font-title) text-3xl font-semibold text-(--fg)"
+          className="font-(family-name:--font-title) text-3xl font-semibold text-(--fg)"
         >
           {tier === "colaborador" ? "Miembro colaborador" : "Miembro"}
         </h2>
@@ -151,7 +127,7 @@ function DemoMembershipControlForUser({ userId }: { userId: string }) {
           <dl className="mt-5 grid gap-4 border-t border-border pt-4 sm:grid-cols-2">
             <div>
               <dt className="text-xs text-(--fg-muted)">
-                Estado de la suscripción de prueba
+                Estado de la suscripción
               </dt>
               <dd className="mt-1 text-sm text-(--fg-secondary)">
                 {getSubscriptionLabel(subscription, tier)}
@@ -168,39 +144,25 @@ function DemoMembershipControlForUser({ userId }: { userId: string }) {
           </dl>
         ) : (
           <p className="mt-3 text-sm text-(--fg-secondary)">
-            Esta cuenta no tiene una suscripción de prueba activa.
-          </p>
-        )}
-
-        {error && (
-          <p className="mt-4 text-sm text-(--error)" role="alert">
-            {error}
-          </p>
-        )}
-        {notice && (
-          <p className="mt-4 text-sm text-(--success)" role="status">
-            {notice}
+            Esta cuenta no tiene una suscripción registrada.
           </p>
         )}
 
         <div className="mt-6 flex flex-wrap gap-3">
-          {tier === "colaborador" ? (
-            <button
-              type="button"
-              onClick={resetToMember}
-              className="min-h-10 border border-(--border-strong) px-4 text-sm text-(--fg-secondary) hover:border-accent hover:text-(--fg) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-            >
-              Restablecer a Miembro
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={activateDemoMembership}
-              className="min-h-10 border border-accent bg-accent px-4 text-sm font-medium text-(--accent-fg) hover:bg-(--accent-hover) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-            >
-              Activar Miembro colaborador de prueba
-            </button>
-          )}
+          <Link
+            href="/pago"
+            className="inline-flex min-h-10 items-center border border-accent bg-accent px-4 text-sm font-medium text-(--accent-fg) hover:bg-(--accent-hover) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            {tier === "colaborador"
+              ? "Renovar con simulación"
+              : "Iniciar simulación de pago"}
+          </Link>
+          <Link
+            href="/mis-transacciones"
+            className="inline-flex min-h-10 items-center border border-(--border-strong) px-4 text-sm text-(--fg-secondary) hover:border-accent hover:text-(--fg) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            Ver mis transacciones
+          </Link>
         </div>
       </section>
     </div>

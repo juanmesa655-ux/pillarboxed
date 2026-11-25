@@ -1,35 +1,81 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Footer } from "@/components/layout/footer";
 import { NavbarSesion } from "@/components/layout/navbar-sesion";
 import { TrendingMovies } from "@/components/movies/trending-movies";
 import type { AuthUser } from "@/lib/data/auth-repository";
 import { getLandingEvent } from "@/lib/data/landing";
 import { getVotingCycles } from "@/lib/data/voting-cycles";
+import { curationRepository } from "@/lib/data/curation-repository";
 
-const quietCardClass =
-  "border border-border bg-(--surface)/60 p-5 sm:p-6";
+const dashboardCardClass =
+  "rounded-lg border border-(--border-strong) bg-(--surface)/60 p-5 sm:p-6";
 
 export function HomeDashboard({ user }: { user: AuthUser }) {
-  const event = getLandingEvent();
-  const openVotingCycles = getVotingCycles().filter(
-    (cycle) => cycle.status === "open",
+  const [event, setEvent] = useState(getLandingEvent());
+  const [openVotingCycles, setOpenVotingCycles] = useState(
+    getVotingCycles().filter((cycle) => cycle.status === "open"),
   );
+  const [curationError, setCurationError] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+    Promise.resolve().then(() => {
+      if (cancelled) return;
+      const eventsResult = curationRepository.getPublicEvents();
+      const cyclesResult = curationRepository.getPublicCycles();
+      if (!eventsResult.ok || !cyclesResult.ok) {
+        setCurationError(
+          "No pudimos actualizar los eventos y ciclos. Revisa el almacenamiento local e inténtalo de nuevo.",
+        );
+        return;
+      }
+
+      const nextEvent = eventsResult.events
+        .filter((item) => item.period === "upcoming")
+        .sort(
+          (a, b) =>
+            new Date(a.startsAt).getTime() - new Date(b.startsAt).getTime(),
+        )[0];
+      setEvent(
+        nextEvent
+          ? {
+              title: nextEvent.title,
+              startsAt: new Intl.DateTimeFormat("es-CO", {
+                dateStyle: "long",
+                timeStyle: "short",
+                timeZone: "America/Bogota",
+              }).format(new Date(nextEvent.startsAt)),
+              simulated: true,
+            }
+          : {
+              title: "No hay próximas funciones publicadas.",
+              startsAt: null,
+              simulated: true,
+            },
+      );
+      setOpenVotingCycles(
+        cyclesResult.cycles.filter((cycle) => cycle.status === "open"),
+      );
+      setCurationError("");
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <div className="flex min-h-screen flex-col">
       <div className="site-frame flex-1">
         <NavbarSesion />
         <main className="mx-auto max-w-300 px-4 py-9 sm:px-6 sm:py-12">
-          <header className="border-b border-border pb-8">
-            <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent">
-              Tu comunidad cinéfila
-            </p>
-            <h1 className="mt-3 font-(family-name:--font-title) text-4xl font-semibold leading-tight text-(--fg) sm:text-5xl">
-              Hola, {user.firstName}
+          <header className="border-b border-border pb-8 text-center">
+            <h1 className="font-(family-name:--font-title) text-4xl font-semibold leading-tight text-(--fg) sm:text-5xl">
+              Hola, {user.firstName} ¡Volviste!
             </h1>
-            <p className="mt-4 max-w-160 text-sm leading-6 text-(--fg-secondary) sm:text-base sm:leading-7">
+            <p className="mx-auto mt-4 max-w-160 text-sm leading-6 text-(--fg-secondary) sm:text-base sm:leading-7">
               Explora películas, descubre las actividades del cineclub y
               comparte tu mirada con la comunidad.
             </p>
@@ -38,12 +84,9 @@ export function HomeDashboard({ user }: { user: AuthUser }) {
           <section className="py-8 sm:py-10" aria-labelledby="trending-title">
             <div className="mb-5 flex items-end justify-between gap-4">
               <div>
-                <p className="font-mono text-xs uppercase tracking-[0.14em] text-accent">
-                  Para descubrir
-                </p>
                 <h2
                   id="trending-title"
-                  className="mt-2 font-(family-name:--font-title) text-2xl font-semibold text-(--fg) sm:text-3xl"
+                  className="font-(family-name:--font-title) text-2xl font-semibold text-(--fg) sm:text-3xl"
                 >
                   Películas populares
                 </h2>
@@ -55,31 +98,36 @@ export function HomeDashboard({ user }: { user: AuthUser }) {
                 Ver todas
               </Link>
             </div>
-            <TrendingMovies layout="horizontal" limit={5} />
+            <TrendingMovies layout="horizontal" limit={6} />
           </section>
 
-          <div className="grid gap-8 border-t border-border py-8 sm:py-10 lg:grid-cols-2">
-            <section aria-labelledby="event-title">
-              <p className="font-mono text-xs uppercase tracking-[0.14em] text-accent">
-                Próxima función
-              </p>
-              <div className={`${quietCardClass} mt-4`}>
+          {curationError && (
+            <p className="mb-6 text-sm text-(--error)" role="alert">
+              {curationError}
+            </p>
+          )}
+          <div className="grid gap-5 border-t border-border py-8 sm:py-10">
+            <section aria-labelledby="event-section-title">
+              <div className={dashboardCardClass}>
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <p className="text-xs uppercase tracking-wider text-(--fg-muted)">
+                  <h2
+                    id="event-section-title"
+                    className="font-(family-name:--font-title) text-2xl font-semibold text-(--fg)"
+                  >
                     {event.simulated ? "Actividad de ejemplo" : "Cineclub"}
-                  </p>
+                  </h2>
                   {event.simulated && (
-                    <span className="rounded-full border border-border px-2 py-1 text-[10px] uppercase tracking-wider text-(--fg-muted)">
+                    <span className="border border-border px-2 py-1 text-xs text-(--fg-muted)">
                       Simulada
                     </span>
                   )}
                 </div>
-                <h2
+                <h3
                   id="event-title"
-                  className="mt-4 font-(family-name:--font-title) text-2xl font-semibold text-(--fg)"
+                  className="mt-4 font-(family-name:--font-title) text-xl font-semibold text-(--fg)"
                 >
                   {event.title}
-                </h2>
+                </h3>
                 <p className="mt-2 text-sm leading-6 text-(--fg-secondary)">
                   {event.startsAt ?? "Fecha y lugar por anunciar."}
                 </p>
@@ -87,10 +135,7 @@ export function HomeDashboard({ user }: { user: AuthUser }) {
             </section>
 
             <section aria-labelledby="voting-title">
-              <p className="font-mono text-xs uppercase tracking-[0.14em] text-accent">
-                Participa
-              </p>
-              <div className={`${quietCardClass} mt-4`}>
+              <div className={dashboardCardClass}>
                 <h2
                   id="voting-title"
                   className="font-(family-name:--font-title) text-2xl font-semibold text-(--fg)"
@@ -125,31 +170,39 @@ export function HomeDashboard({ user }: { user: AuthUser }) {
             </section>
           </div>
 
-          <div className="grid gap-4 border-t border-border py-8 sm:grid-cols-2 sm:gap-6 sm:py-10">
-            <section className={quietCardClass} aria-labelledby="lists-title">
+          <section
+            className="border-t border-border py-8 sm:py-10"
+            aria-labelledby="classics-title"
+          >
+            <div className="mb-5">
               <h2
-                id="lists-title"
+                id="classics-title"
                 className="font-(family-name:--font-title) text-xl font-semibold text-(--fg)"
               >
-                Listas populares
+                Lista de clásicos
               </h2>
-              <p className="mt-2 text-sm leading-6 text-(--fg-secondary)">
-                Todavía no hay listas de la comunidad.
+              <p className="mt-2 text-sm text-(--fg-secondary)">
+                Películas estrenadas hasta 1980.
               </p>
-            </section>
-            <section className={quietCardClass} aria-labelledby="forum-title">
-              <h2
-                id="forum-title"
-                className="font-(family-name:--font-title) text-xl font-semibold text-(--fg)"
-              >
-                Conversaciones
-              </h2>
-              <p className="mt-2 text-sm leading-6 text-(--fg-secondary)">
-                El foro aún no tiene publicaciones. Pronto podrás compartir tus
-                recomendaciones.
-              </p>
-            </section>
-          </div>
+            </div>
+            <TrendingMovies
+              source="classics"
+              layout="horizontal"
+              limit={6}
+            />
+          </section>
+
+          <section
+            className="border-t border-border py-8 text-center sm:py-10"
+            aria-labelledby="forum-title"
+          >
+            <h2
+              id="forum-title"
+              className="font-(family-name:--font-title) text-2xl font-semibold text-(--fg)"
+            >
+              Próximamente un foro en este espacio
+            </h2>
+          </section>
         </main>
       </div>
       <Footer />

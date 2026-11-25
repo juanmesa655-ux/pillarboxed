@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { CalendarDays, Clock3, MapPin } from "lucide-react";
+import { CalendarDays } from "lucide-react";
 import { SharedSeats } from "@/components/events/shared-seats";
+import { CineFunctionList } from "@/components/events/cine-function-list";
 import { VotingCycles } from "@/components/events/voting-cycles";
 import { Footer } from "@/components/layout/footer";
 import { NavbarVisitante } from "@/components/layout/navbar-visitante";
@@ -13,33 +14,6 @@ function isPeriod(value: string | string[] | undefined): value is Period {
   return value === "upcoming" || value === "past" || value === "all";
 }
 
-function formatDate(value: string, options: Intl.DateTimeFormatOptions) {
-  return new Intl.DateTimeFormat("es-CO", {
-    ...options,
-    timeZone: "America/Bogota",
-  }).format(new Date(value));
-}
-
-function formatTime(value: string) {
-  return formatDate(value, { hour: "2-digit", minute: "2-digit" });
-}
-
-function formatLongDate(value: string) {
-  return formatDate(value, {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
-
-function formatDateParts(value: string) {
-  return {
-    day: formatDate(value, { day: "2-digit" }),
-    month: formatDate(value, { month: "short" }).replace(".", ""),
-  };
-}
-
 export default async function EventsPage({
   searchParams,
 }: PageProps<"/eventos">) {
@@ -49,32 +23,13 @@ export default async function EventsPage({
   const isVotingTab = params.tab === "votaciones";
   const isSeatsTab = params.tab === "butacas";
 
-  const filteredFunctions = getCineFunctions()
-    .filter((cineFunction) => {
-      const matchesPeriod =
-        period === "all" ||
-        cineFunction.period === period;
-      const matchesDate =
-        !date || cineFunction.startsAt.slice(0, 10) === date;
-
-      return matchesPeriod && matchesDate;
-    })
-    .sort((a, b) => {
-      const difference =
-        new Date(a.startsAt).getTime() - new Date(b.startsAt).getTime();
-      return period === "past" ? -difference : difference;
-    });
-
   return (
     <div className="flex min-h-screen flex-col">
       <div className="site-frame flex-1">
         <NavbarVisitante />
         <main className="mx-auto max-w-300 px-4 py-9 sm:px-6 sm:py-12">
           <header className="border-b border-border pb-7">
-            <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent">
-              Cineclub · IU Pascual Bravo
-            </p>
-            <h1 className="mt-3 font-(family-name:--font-title) text-4xl font-semibold leading-tight text-(--fg) sm:text-5xl">
+            <h1 className="font-(family-name:--font-title) text-4xl font-semibold leading-tight text-(--fg) sm:text-5xl">
               {isVotingTab
                 ? "Votaciones"
                 : isSeatsTab
@@ -89,7 +44,7 @@ export default async function EventsPage({
                   : "Consulta las próximas proyecciones y encuentra un espacio para disfrutar y conversar sobre cine."}
             </p>
             {!isVotingTab && !isSeatsTab && (
-              <p className="mt-4 inline-flex items-center gap-2 border border-(--info)/30 bg-(--info)/10 px-3 py-2 text-xs leading-5 text-(--fg-secondary)">
+              <p className="mt-4 inline-flex items-center gap-2 text-sm leading-6 text-(--fg-secondary)">
                 <CalendarDays
                   aria-hidden="true"
                   className="size-4 shrink-0 text-(--info)"
@@ -199,119 +154,11 @@ export default async function EventsPage({
                   )}
                 </form>
               </section>
-              <section aria-labelledby="functions-heading" aria-live="polite">
-                <div className="mb-5 flex flex-wrap items-baseline justify-between gap-2">
-                  <h2
-                    id="functions-heading"
-                    className="font-(family-name:--font-title) text-2xl font-semibold text-(--fg)"
-                  >
-                    {period === "past"
-                      ? "Funciones anteriores"
-                      : period === "all"
-                        ? "Todas las funciones"
-                        : "Próximas funciones"}
-                  </h2>
-                  <p className="font-mono text-xs tabular-nums text-(--fg-muted)">
-                    {filteredFunctions.length}{" "}
-                    {filteredFunctions.length === 1 ? "función" : "funciones"}
-                  </p>
-                </div>
-
-                {filteredFunctions.length === 0 ? (
-                  <div className="border-y border-border py-10 text-center">
-                    <CalendarDays
-                      aria-hidden="true"
-                      className="mx-auto size-6 text-(--fg-muted)"
-                    />
-                    <p className="mt-3 font-(family-name:--font-title) text-xl text-(--fg)">
-                      No encontramos funciones para estos filtros.
-                    </p>
-                    <p className="mt-2 text-sm text-(--fg-secondary)">
-                      Prueba con otra fecha o consulta todas las funciones.
-                    </p>
-                  </div>
-                ) : (
-                  <ul className="divide-y divide-border border-y border-border">
-                    {filteredFunctions.map((cineFunction) => {
-                      const dateParts = formatDateParts(cineFunction.startsAt);
-                      const isUpcoming = cineFunction.period === "upcoming";
-
-                      return (
-                        <li
-                          key={cineFunction.id}
-                          className="grid gap-4 py-5 sm:grid-cols-[5rem_minmax(0,1fr)_auto] sm:items-center sm:gap-6 sm:py-6"
-                        >
-                          <div
-                            className="flex h-16 w-16 flex-col items-center justify-center border border-border bg-(--surface)"
-                            aria-label={formatLongDate(cineFunction.startsAt)}
-                          >
-                            <span className="font-mono text-2xl leading-none tabular-nums text-(--fg)">
-                              {dateParts.day}
-                            </span>
-                            <span className="mt-1 font-mono text-[10px] uppercase tracking-wider text-(--accent)">
-                              {dateParts.month}
-                            </span>
-                          </div>
-
-                          <div className="min-w-0">
-                            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                              <p className="text-xs uppercase tracking-[0.12em] text-(--fg-muted)">
-                                Función de ejemplo
-                              </p>
-                              <span
-                                className={
-                                  isUpcoming
-                                    ? "border border-(--success)/30 bg-(--success)/10 px-2 py-0.5 text-xs text-(--success)"
-                                    : "border border-border bg-(--surface) px-2 py-0.5 text-xs text-(--fg-muted)"
-                                }
-                              >
-                                {isUpcoming ? "Próxima" : "Realizada"}
-                              </span>
-                            </div>
-                            <h3 className="mt-2 font-(family-name:--font-title) text-xl font-semibold text-(--fg) sm:text-2xl">
-                              {cineFunction.title}
-                            </h3>
-                            <p className="mt-2 max-w-180 text-sm leading-6 text-(--fg-secondary)">
-                              {cineFunction.description}
-                            </p>
-                            <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-xs text-(--fg-secondary)">
-                              <span className="inline-flex items-center gap-2">
-                                <CalendarDays
-                                  aria-hidden="true"
-                                  className="size-3.5 text-(--fg-muted)"
-                                />
-                                {formatLongDate(cineFunction.startsAt)}
-                              </span>
-                              <span className="inline-flex items-center gap-2">
-                                <Clock3
-                                  aria-hidden="true"
-                                  className="size-3.5 text-(--fg-muted)"
-                                />
-                                {formatTime(cineFunction.startsAt)}
-                              </span>
-                              <span className="inline-flex items-center gap-2">
-                                <MapPin
-                                  aria-hidden="true"
-                                  className="size-3.5 text-(--fg-muted)"
-                                />
-                                {cineFunction.venue}
-                              </span>
-                            </div>
-                            {isUpcoming && (
-                              <Link
-                                href={`/eventos/${cineFunction.id}`}
-                                className="mt-4 inline-flex text-sm text-accent underline decoration-border underline-offset-4 hover:text-(--accent-hover) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-                              >
-                                Ver detalle y crear butaca
-                              </Link>
-                            )}
-                          </div>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                )}
-              </section>
+              <CineFunctionList
+                initialFunctions={getCineFunctions()}
+                period={period}
+                date={date}
+              />
             </>
           )}
         </main>

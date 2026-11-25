@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Search, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { navigateWithDocumentLoad } from "@/components/errors/full-page-navigation-link";
 import { tmdbMovieRepository, type MovieSummary, type SearchMoviesResult } from "@/lib/data/movies";
 
 type SearchState =
@@ -39,7 +40,11 @@ function errorMessage(
   return "No pudimos cargar la búsqueda. Intenta de nuevo.";
 }
 
-export function MovieSearchBar() {
+export function MovieSearchBar({
+  fullPageNavigation = false,
+}: {
+  fullPageNavigation?: boolean;
+}) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState("");
@@ -109,7 +114,12 @@ export function MovieSearchBar() {
 
     setOpen(false);
     setMobileExpanded(false);
-    router.push(`/buscar?q=${encodeURIComponent(normalizedQuery)}`);
+    const destination = `/buscar?q=${encodeURIComponent(normalizedQuery)}`;
+    if (fullPageNavigation) {
+      navigateWithDocumentLoad(destination);
+    } else {
+      router.push(destination);
+    }
   }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {

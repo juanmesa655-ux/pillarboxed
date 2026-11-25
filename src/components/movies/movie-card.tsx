@@ -6,23 +6,32 @@ export function MovieCard({
   movie,
   compact = false,
   priority = false,
+  posterOnly = false,
+  hideDetails = false,
 }: {
   movie: MovieSummary;
   compact?: boolean;
   priority?: boolean;
+  posterOnly?: boolean;
+  hideDetails?: boolean;
 }) {
   const year = movie.releaseDate?.match(/^\d{4}/)?.[0];
   const posterUrl = movie.posterPath
-    ? `https://image.tmdb.org/t/p/w500${movie.posterPath}`
+    ? `https://image.tmdb.org/t/p/${posterOnly ? "w780" : "w500"}${movie.posterPath}`
     : null;
 
   return (
     <article className="group min-w-0">
       <Link
         href={`/peliculas/${movie.id}`}
+        aria-label={`Ver película: ${movie.title}`}
         className="block rounded-[2px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
       >
-        <div className="relative aspect-2/3 overflow-hidden border border-border bg-(--surface)">
+        <div
+          className={`relative aspect-2/3 overflow-hidden rounded-[2px] border border-(--border-strong) bg-(--surface) ${
+            posterOnly ? "featured-poster-frame" : ""
+          }`}
+        >
           {posterUrl ? (
             <Image
               src={posterUrl}
@@ -30,9 +39,11 @@ export function MovieCard({
               fill
               loading={priority ? "eager" : "lazy"}
               sizes={
-                compact
-                  ? "(max-width: 640px) 40vw, 190px"
-                  : "(max-width: 640px) 45vw, (max-width: 1024px) 28vw, 20vw"
+                posterOnly
+                  ? "(max-width: 1024px) min(72vw, 320px), 320px"
+                  : compact
+                    ? "(max-width: 640px) 40vw, 190px"
+                    : "(max-width: 640px) 45vw, (max-width: 1024px) 28vw, 20vw"
               }
               className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
             />
@@ -46,24 +57,30 @@ export function MovieCard({
             </div>
           )}
         </div>
-        <h2
-          className={`mt-3 line-clamp-2 font-(family-name:--font-title) font-semibold leading-tight text-(--fg) group-hover:text-accent ${
-            compact ? "text-base" : "text-lg"
-          }`}
-        >
-          {movie.title}
-        </h2>
-        <p className="mt-2 flex flex-wrap gap-x-2 font-mono text-xs text-(--fg-secondary)">
-          <span>{year ?? "Año no disponible"}</span>
-          <span aria-hidden="true">·</span>
-          <span>
-            {movie.voteAverage === null
-              ? "Sin puntuación"
-              : `${movie.voteAverage.toFixed(1)} / 10`}
-          </span>
-        </p>
+        {!posterOnly && !hideDetails && (
+          <>
+            <h2
+              className={`mt-3 line-clamp-2 font-(family-name:--font-title) font-semibold leading-tight text-(--fg) group-hover:text-accent ${
+                compact ? "text-base" : "text-lg"
+              }`}
+            >
+              {movie.title}
+            </h2>
+            <p className="mt-2 flex flex-wrap gap-x-2 font-mono text-xs text-(--fg-secondary)">
+              <span>{year ?? "Año no disponible"}</span>
+              <span aria-hidden="true">·</span>
+              <span>
+                {movie.voteAverage === null
+                  ? "Sin puntuación"
+                  : `${movie.voteAverage.toFixed(1)} / 10`}
+              </span>
+            </p>
+          </>
+        )}
       </Link>
       {!compact &&
+        !posterOnly &&
+        !hideDetails &&
         (movie.overview ? (
           <p className="mt-3 line-clamp-3 text-sm leading-6 text-(--fg-secondary)">
             {movie.overview}

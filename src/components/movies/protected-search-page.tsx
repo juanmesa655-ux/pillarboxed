@@ -133,10 +133,7 @@ export function ProtectedSearchPage({
         <NavbarSesion />
         <main className="mx-auto max-w-300 px-4 py-9 sm:px-6 sm:py-12">
           <header className="border-b border-border pb-7">
-            <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent">
-              Catálogo
-            </p>
-            <h1 className="mt-3 font-(family-name:--font-title) text-4xl font-semibold leading-tight text-(--fg) sm:text-5xl">
+            <h1 className="font-(family-name:--font-title) text-4xl font-semibold leading-tight text-(--fg) sm:text-5xl">
               Resultados de búsqueda
             </h1>
             <form

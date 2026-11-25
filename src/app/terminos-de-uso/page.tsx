@@ -68,10 +68,12 @@ export default function TermsOfUsePage() {
                 Membresías y pagos
               </h2>
               <p className="mt-3">
-                En el prototipo no se realizan cobros reales. Antes de habilitar
-                pagos, deberán publicarse las condiciones del plan, precio,
-                vigencia, cancelaciones, reembolsos y canal de reclamos. La
-                aplicación no debe almacenar datos de tarjetas.
+                En el prototipo solo se registran escenarios de pago simulados;
+                no se realizan cobros ni se solicitan datos financieros. Antes
+                de habilitar pagos reales, deberán aprobarse y publicarse las
+                condiciones del plan, precio, vigencia, cancelaciones,
+                reembolsos y canal de reclamos. La aplicación no debe almacenar
+                datos de tarjetas.
               </p>
             </section>
 

@@ -78,7 +78,7 @@ function InvitationCard({
     <li className="grid gap-4 py-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:gap-6 sm:py-6">
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-3">
-          <p className="text-xs uppercase tracking-[0.12em] text-(--fg-muted)">
+          <p className="text-sm text-(--fg-muted)">
             Invitación de {invitation.inviterName}
           </p>
           <span
@@ -333,7 +333,7 @@ function SharedSeatsForUser({
               <li key={group.id} className="py-5 sm:py-6">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <p className="text-xs uppercase tracking-[0.12em] text-(--fg-muted)">
+                    <p className="text-sm text-(--fg-muted)">
                       Función compartida
                     </p>
                     <h3 className="mt-2 font-(family-name:--font-title) text-xl font-semibold text-(--fg) sm:text-2xl">

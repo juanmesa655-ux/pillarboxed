@@ -1,4 +1,5 @@
-import { getCineFunctions } from "@/lib/data/events";
+import { curationRepository } from "@/lib/data/curation-repository";
+import type { CineFunction } from "@/lib/data/events";
 import {
   getMembershipTier,
   membershipRepository,
@@ -118,8 +119,12 @@ function isSharedSeatGroup(value: unknown): value is SharedSeatGroup {
   );
 }
 
-function createDemoGroups(userId: string, userName: string): SharedSeatGroup[] {
-  const upcomingFunctions = getCineFunctions().filter(
+function createDemoGroups(
+  userId: string,
+  userName: string,
+  events: CineFunction[],
+): SharedSeatGroup[] {
+  const upcomingFunctions = events.filter(
     (cineFunction) => cineFunction.period === "upcoming",
   );
   const groups: SharedSeatGroup[] = [];
@@ -184,6 +189,7 @@ function createDemoGroups(userId: string, userName: string): SharedSeatGroup[] {
 function readGroups(
   userId: string,
   userName: string,
+  events: CineFunction[],
 ):
   | { ok: true; groups: SharedSeatGroup[] }
   | { ok: false; reason: "invalid-data" | "unavailable" } {
@@ -204,7 +210,7 @@ function readGroups(
   }
 
   if (serialized === null) {
-    return { ok: true, groups: createDemoGroups(userId, userName) };
+    return { ok: true, groups: createDemoGroups(userId, userName, events) };
   }
 
   let parsed: unknown;
@@ -278,7 +284,9 @@ export const sharedSeatRepository: SharedSeatRepository = {
   },
 
   getOverview(userId, userName) {
-    const stored = readGroups(userId, userName);
+    const events = curationRepository.getPublicEvents();
+    if (!events.ok) return events;
+    const stored = readGroups(userId, userName, events.events);
     if (!stored.ok) return stored;
 
     return {
@@ -294,7 +302,9 @@ export const sharedSeatRepository: SharedSeatRepository = {
       return { ok: false, reason: "membership-required" };
     }
 
-    const cineFunction = getCineFunctions().find(
+    const events = curationRepository.getPublicEvents();
+    if (!events.ok) return events;
+    const cineFunction = events.events.find(
       (item) => item.id === eventId,
     );
     if (!cineFunction) return { ok: false, reason: "invalid-event" };
@@ -318,7 +328,7 @@ export const sharedSeatRepository: SharedSeatRepository = {
       return { ok: false, reason: "invalid-invitees" };
     }
 
-    const stored = readGroups(userId, userName);
+    const stored = readGroups(userId, userName, events.events);
     if (!stored.ok) return stored;
 
     let groupId: string;
@@ -362,7 +372,9 @@ export const sharedSeatRepository: SharedSeatRepository = {
   },
 
   respondToInvitation(userId, userName, invitationId, response) {
-    const stored = readGroups(userId, userName);
+    const events = curationRepository.getPublicEvents();
+    if (!events.ok) return events;
+    const stored = readGroups(userId, userName, events.events);
     if (!stored.ok) return stored;
 
     let found = false;

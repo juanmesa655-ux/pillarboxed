@@ -9,10 +9,12 @@ const publicPaths = new Set([
   "/acerca-de",
   "/acceso",
   "/ayuda",
+  "/creditos",
   "/membresia",
   "/politica-de-privacidad",
   "/solicitar-acceso",
   "/terminos-de-uso",
+  "/403",
 ]);
 
 export function SessionGate({ children }: { children: ReactNode }) {

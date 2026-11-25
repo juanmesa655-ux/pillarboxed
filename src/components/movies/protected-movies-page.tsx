@@ -44,10 +44,7 @@ export function ProtectedMoviesPage() {
         <NavbarSesion />
         <main className="mx-auto max-w-300 px-4 py-10 sm:px-6 sm:py-14">
           <header className="mb-8 border-b border-border pb-7 sm:mb-9">
-            <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent">
-              Catálogo
-            </p>
-            <h1 className="mt-3 font-(family-name:--font-title) text-4xl font-semibold leading-tight text-(--fg) sm:text-5xl">
+            <h1 className="font-(family-name:--font-title) text-4xl font-semibold leading-tight text-(--fg) sm:text-5xl">
               Películas populares
             </h1>
             <p className="mt-4 max-w-152.5 text-sm leading-6 text-(--fg-secondary) sm:text-base sm:leading-7">

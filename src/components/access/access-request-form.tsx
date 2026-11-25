@@ -52,7 +52,9 @@ export function AccessRequestForm() {
           ? "Si tienes correo institucional, regístrate o inicia sesión con esa dirección en lugar de solicitar acceso."
           : request.reason === "unavailable"
             ? "No pudimos guardar la solicitud en este navegador. Inténtalo de nuevo."
-            : "No pudimos leer las solicitudes guardadas. Contacta a soporte.",
+            : request.reason === "invalid-data"
+              ? "Revisa los datos del formulario e inténtalo de nuevo."
+              : "No pudimos leer las solicitudes guardadas. Contacta a soporte.",
       );
       return;
     }

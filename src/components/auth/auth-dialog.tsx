@@ -7,6 +7,10 @@ import { ArrowRight, Eye, EyeOff, X } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { cn } from "cn";
 import { useSession } from "@/components/auth/session-provider";
+import {
+  FullPageNavigationLink,
+  navigateWithDocumentLoad,
+} from "@/components/errors/full-page-navigation-link";
 import { Button } from "@/components/ui/button";
 import {
   authRepository,
@@ -33,6 +37,7 @@ type AuthDialogProps = {
   registrationArrow?: boolean;
   loginLabel?: string;
   loginButton?: boolean;
+  fullPageNavigation?: boolean;
 };
 
 function PasswordField({
@@ -66,7 +71,7 @@ function PasswordField({
           onClick={() => setVisible((current) => !current)}
           aria-label={visible ? "Ocultar contraseña" : "Mostrar contraseña"}
           aria-pressed={visible}
-          className="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-(--fg-secondary) hover:text-(--fg)"
+          className="password-visibility-toggle absolute inset-y-0.5 right-0.5 flex w-10 items-center justify-center text-(--fg-secondary) hover:text-(--fg)"
         >
           {visible ? (
             <EyeOff aria-hidden="true" size={18} />
@@ -87,6 +92,7 @@ export function AuthDialog({
   registrationArrow = false,
   loginLabel = "Iniciar sesión",
   loginButton = false,
+  fullPageNavigation = false,
 }: AuthDialogProps) {
   const router = useRouter();
   const { setAuthenticatedUser } = useSession();
@@ -195,7 +201,11 @@ export function AuthDialog({
       setAuthenticatedUser(result.user);
       setLoginEmail(result.user.email);
       handleOpenChange(false);
-      router.push("/");
+      if (fullPageNavigation) {
+        navigateWithDocumentLoad("/");
+      } else {
+        router.push("/");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -241,8 +251,8 @@ export function AuthDialog({
               variant={loginButton ? "default" : "link"}
               className={
                 loginButton
-                  ? "h-11 w-full rounded-[3px] bg-accent px-6 text-base font-semibold text-accent-foreground hover:bg-(--accent-hover)"
-                  : "text-sm text-(--fg-secondary)"
+                  ? "h-11 w-full rounded-[3px] bg-accent px-6 text-base font-semibold text-accent-foreground hover:bg-(--accent-hover) hover:text-white"
+                  : "text-sm text-(--fg-secondary) no-underline hover:no-underline"
               }
             />
           }
@@ -257,7 +267,7 @@ export function AuthDialog({
             <Button
               className={
                 registrationButtonClassName ??
-                "h-10 rounded-[3px] bg-accent px-5 text-sm font-semibold text-accent-foreground hover:bg-(--accent-hover)"
+                "h-10 rounded-[3px] bg-accent px-5 text-sm font-semibold text-accent-foreground hover:bg-(--accent-hover) hover:text-white"
               }
             />
           }
@@ -273,7 +283,7 @@ export function AuthDialog({
           className={cn(
             "fixed left-1/2 top-1/2 z-50 w-[calc(100vw-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 border border-border bg-(--surface-elevated) p-4 text-(--fg) sm:p-6",
             (mode === "registration" || mode === "verification") &&
-              "max-h-[calc(100dvh-2rem)] overflow-y-auto",
+              "auth-registration-scroll max-h-[calc(100dvh-2rem)] overflow-y-auto",
           )}
         >
           <div className="mb-4 flex items-center justify-between gap-4 sm:mb-6">
@@ -593,19 +603,37 @@ export function AuthDialog({
                 />
                 <label htmlFor="registration-terms">
                   Acepto los{" "}
-                  <Link
-                    href="/terminos-de-uso"
-                    className="text-(--fg) underline underline-offset-2 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-                  >
-                    términos de uso
-                  </Link>{" "}
+                  {fullPageNavigation ? (
+                    <FullPageNavigationLink
+                      href="/terminos-de-uso"
+                      className="text-(--fg) underline underline-offset-2 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                    >
+                      términos de uso
+                    </FullPageNavigationLink>
+                  ) : (
+                    <Link
+                      href="/terminos-de-uso"
+                      className="text-(--fg) underline underline-offset-2 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                    >
+                      términos de uso
+                    </Link>
+                  )}{" "}
                   y la{" "}
-                  <Link
-                    href="/politica-de-privacidad"
-                    className="text-(--fg) underline underline-offset-2 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-                  >
-                    política de privacidad
-                  </Link>
+                  {fullPageNavigation ? (
+                    <FullPageNavigationLink
+                      href="/politica-de-privacidad"
+                      className="text-(--fg) underline underline-offset-2 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                    >
+                      política de privacidad
+                    </FullPageNavigationLink>
+                  ) : (
+                    <Link
+                      href="/politica-de-privacidad"
+                      className="text-(--fg) underline underline-offset-2 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                    >
+                      política de privacidad
+                    </Link>
+                  )}
                   .
                 </label>
               </div>

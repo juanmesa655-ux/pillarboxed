@@ -21,10 +21,11 @@ export function MembershipLoginAction() {
     return (
       <div>
         <p className="text-sm leading-6 text-(--fg-secondary)" role="status">
-          El flujo de pago todavía no está disponible en este prototipo.
+          Consulta tu nivel de membresía y accede al flujo de demostración
+          desde tu perfil.
         </p>
         <Link
-          href="/mi-suscripcion"
+          href="/perfil?tab=suscripcion"
           className="mt-3 inline-flex text-sm text-accent underline decoration-border underline-offset-4 hover:text-(--accent-hover) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           Ir a Mi suscripción

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { SharedSeatCreation } from "@/components/events/shared-seat-creation";
+import { EventDetailContent } from "@/components/events/event-detail-content";
 import { Footer } from "@/components/layout/footer";
 import { NavbarVisitante } from "@/components/layout/navbar-visitante";
 import { getCineFunctions } from "@/lib/data/events";
@@ -17,7 +16,6 @@ export default async function EventDetailPage({
 }: PageProps<"/eventos/[id]">) {
   const { id } = await params;
   const cineFunction = getCineFunctions().find((item) => item.id === id);
-  if (!cineFunction) notFound();
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -30,7 +28,7 @@ export default async function EventDetailPage({
           >
             Volver a funciones
           </Link>
-          <SharedSeatCreation cineFunction={cineFunction} />
+          <EventDetailContent id={id} initialFunction={cineFunction} />
         </main>
       </div>
       <Footer />

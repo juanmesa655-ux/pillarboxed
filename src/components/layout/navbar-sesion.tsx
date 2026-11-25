@@ -2,11 +2,17 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
+import { LogOut, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSession } from "@/components/auth/session-provider";
+import {
+  FullPageNavigationLink,
+  navigateWithDocumentLoad,
+} from "@/components/errors/full-page-navigation-link";
 import { PillarboxedLogo } from "@/components/layout/pillarboxed-logo";
 import { MovieSearchBar } from "@/components/movies/movie-search-bar";
+import { NotificationBell } from "@/components/notifications/notification-bell";
 
 const navigationItems = [
   { label: "Inicio", href: "/" },
@@ -14,13 +20,65 @@ const navigationItems = [
   { label: "Eventos", href: "/eventos" },
 ];
 
-export function NavbarSesion() {
+function NavbarLink({
+  href,
+  fullPageNavigation,
+  children,
+  className,
+  "aria-current": ariaCurrent,
+  "aria-label": ariaLabel,
+  title,
+}: {
+  href: string;
+  fullPageNavigation: boolean;
+  children: ReactNode;
+  className?: string;
+  "aria-current"?: "page";
+  "aria-label"?: string;
+  title?: string;
+}) {
+  if (fullPageNavigation) {
+    return (
+      <FullPageNavigationLink
+        href={href}
+        className={className}
+        aria-current={ariaCurrent}
+        aria-label={ariaLabel}
+        title={title}
+      >
+        {children}
+      </FullPageNavigationLink>
+    );
+  }
+
+  return (
+    <Link
+      href={href}
+      className={className}
+      aria-current={ariaCurrent}
+      aria-label={ariaLabel}
+      title={title}
+    >
+      {children}
+    </Link>
+  );
+}
+
+export function NavbarSesion({
+  fullPageNavigation = false,
+}: {
+  fullPageNavigation?: boolean;
+}) {
   const pathname = usePathname();
   const router = useRouter();
   const { state, signOut } = useSession();
   const [error, setError] = useState("");
 
   if (state.status !== "ready" || state.user === null) return null;
+  const profileHref = `/usuarios/${state.user.id}`;
+  const isProfileRoute = pathname === profileHref || pathname === "/perfil";
+  const isCurator =
+    state.user.role === "curador" || state.user.role === "administrador";
 
   function handleSignOut() {
     const result = signOut();
@@ -28,24 +86,29 @@ export function NavbarSesion() {
       setError("No pudimos cerrar la sesión de prueba. Intenta de nuevo.");
       return;
     }
-    router.replace("/");
+    if (fullPageNavigation) {
+      navigateWithDocumentLoad("/");
+    } else {
+      router.replace("/");
+    }
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/70 bg-[linear-gradient(180deg,rgba(5,5,6,0.98),rgba(5,5,6,0.82))]">
+    <header className="site-navbar sticky top-0 z-40 border-b border-border/70 bg-[linear-gradient(180deg,rgba(5,5,6,0.98),rgba(5,5,6,0.82))]">
       <nav
         className="mx-auto flex min-h-16 max-w-300 items-center justify-between gap-3 px-4 sm:px-6"
         aria-label="Navegación principal"
       >
         <div className="flex min-w-0 items-center gap-3 sm:gap-8">
-          <PillarboxedLogo />
-          <ul className="flex items-center gap-3 text-xs sm:gap-5 sm:text-sm">
+          <PillarboxedLogo fullPageNavigation={fullPageNavigation} />
+          <ul className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] sm:gap-x-3 sm:text-xs lg:gap-x-5 lg:text-sm">
             {navigationItems.map((item) => {
               const active = pathname === item.href;
               return (
                 <li key={item.href}>
-                  <Link
+                  <NavbarLink
                     href={item.href}
+                    fullPageNavigation={fullPageNavigation}
                     aria-current={active ? "page" : undefined}
                     className={
                       active
@@ -54,25 +117,75 @@ export function NavbarSesion() {
                     }
                   >
                     {item.label}
-                  </Link>
+                  </NavbarLink>
                 </li>
               );
             })}
+            {isCurator && (
+              <li>
+                <NavbarLink
+                  href="/curaduria/eventos"
+                  fullPageNavigation={fullPageNavigation}
+                  aria-current={
+                    pathname?.startsWith("/curaduria/") ? "page" : undefined
+                  }
+                  className={
+                    pathname?.startsWith("/curaduria/")
+                      ? "border-b border-accent pb-1 text-(--fg)"
+                      : "text-(--fg-secondary) hover:text-(--fg)"
+                  }
+                >
+                  Curaduría
+                </NavbarLink>
+              </li>
+            )}
+            {state.user.role === "administrador" && (
+              <li>
+                <NavbarLink
+                  href="/admin/usuarios"
+                  fullPageNavigation={fullPageNavigation}
+                  aria-current={
+                    pathname?.startsWith("/admin/") ? "page" : undefined
+                  }
+                  className={
+                    pathname?.startsWith("/admin/")
+                      ? "border-b border-accent pb-1 text-(--fg)"
+                      : "text-(--fg-secondary) hover:text-(--fg)"
+                  }
+                >
+                  Administración
+                </NavbarLink>
+              </li>
+            )}
           </ul>
         </div>
-        <MovieSearchBar />
+        <MovieSearchBar fullPageNavigation={fullPageNavigation} />
         <div className="flex shrink-0 items-center gap-2">
-          <span className="hidden max-w-36 truncate text-sm text-(--fg-secondary) md:inline">
-            {state.user.firstName}
-          </span>
+          <NotificationBell fullPageNavigation={fullPageNavigation} />
+          <NavbarLink
+            href={profileHref}
+            fullPageNavigation={fullPageNavigation}
+            aria-label="Mi perfil"
+            aria-current={isProfileRoute ? "page" : undefined}
+            title="Mi perfil"
+            className={`flex size-9 items-center justify-center text-(--fg-secondary) transition-colors hover:text-(--fg) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+              isProfileRoute
+                ? "border-b border-accent text-(--fg)"
+                : "border-b border-transparent"
+            }`}
+          >
+            <UserRound aria-hidden="true" className="size-5" strokeWidth={1.5} />
+          </NavbarLink>
           <Button
             type="button"
-            variant="link"
-            className="h-auto p-1 text-xs text-(--fg-secondary) sm:text-sm"
+            variant="ghost"
+            size="icon-lg"
+            aria-label="Cerrar sesión"
+            title="Cerrar sesión"
+            className="text-(--fg-secondary) hover:text-(--fg)"
             onClick={handleSignOut}
           >
-            <span className="sm:hidden">Salir</span>
-            <span className="hidden sm:inline">Cerrar sesión</span>
+            <LogOut aria-hidden="true" className="size-5" strokeWidth={1.5} />
           </Button>
         </div>
       </nav>
