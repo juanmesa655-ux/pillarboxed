@@ -61,6 +61,18 @@ export type ProfileUpdateResult =
   | { ok: true; user: AuthUser }
   | { ok: false; reason: "invalid-data" | "not-found" | "unavailable" };
 
+export type PasswordUpdateResult =
+  | { ok: true }
+  | {
+      ok: false;
+      reason:
+        | "invalid-credentials"
+        | "invalid-data"
+        | "not-found"
+        | "unavailable"
+        | "weak-password";
+    };
+
 export type PublicProfileReadResult =
   | { ok: true; profile: PublicProfile | null }
   | {
@@ -100,6 +112,10 @@ export interface AuthRepository {
   signIn(email: string, password: string): Promise<AuthActionResult>;
   readSession(): SessionReadResult;
   updateProfile(input: ProfileUpdateInput): ProfileUpdateResult;
+  updatePassword(
+    currentPassword: string,
+    newPassword: string,
+  ): Promise<PasswordUpdateResult>;
   readPublicProfile(userId: string): PublicProfileReadResult;
   listUsersForRoleManagement(): RoleManagementReadResult;
   updateUserRole(
@@ -573,6 +589,57 @@ export const authRepository: AuthRepository = {
     if (!saved.ok) return saved;
 
     return { ok: true, user: toAuthUser(account) };
+  },
+
+  async updatePassword(currentPassword, newPassword) {
+    const session = this.readSession();
+    if (!session.ok) return session;
+    if (session.user === null) return { ok: false, reason: "not-found" };
+    const user = session.user;
+    if (!currentPassword) {
+      return { ok: false, reason: "invalid-credentials" };
+    }
+    if (newPassword.length < 8) {
+      return { ok: false, reason: "weak-password" };
+    }
+    if (!globalThis.crypto?.subtle) {
+      return { ok: false, reason: "unavailable" };
+    }
+
+    const stored = readAccounts();
+    if (!stored.ok) return stored;
+
+    const accountIndex = stored.accounts.findIndex(
+      (account) =>
+        account.id === user.id && account.status === "activa",
+    );
+    if (accountIndex < 0) return { ok: false, reason: "not-found" };
+
+    const account = stored.accounts[accountIndex];
+    let currentPasswordHash: string;
+    let passwordSalt: string;
+    let passwordHash: string;
+    try {
+      currentPasswordHash = await hashPassword(
+        currentPassword,
+        account.passwordSalt,
+      );
+      if (currentPasswordHash !== account.passwordHash) {
+        return { ok: false, reason: "invalid-credentials" };
+      }
+
+      passwordSalt = createSalt();
+      passwordHash = await hashPassword(newPassword, passwordSalt);
+    } catch (error) {
+      if (isUnavailableCryptoError(error)) {
+        return { ok: false, reason: "unavailable" };
+      }
+      throw error;
+    }
+
+    const accounts = [...stored.accounts];
+    accounts[accountIndex] = { ...account, passwordSalt, passwordHash };
+    return saveAccounts(accounts);
   },
 
   readPublicProfile(userId) {

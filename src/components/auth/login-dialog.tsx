@@ -31,7 +31,7 @@ export function LoginDialog() {
       </Dialog.Trigger>
 
       <Dialog.Portal>
-        <Dialog.Backdrop className="fixed inset-0 z-50 bg-black/70" />
+        <Dialog.Backdrop className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm" />
         <Dialog.Popup className="fixed left-1/2 top-1/2 z-50 w-[calc(100vw-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 border border-border bg-(--surface-elevated) p-4 text-(--fg) sm:p-6">
           <div className="mb-4 flex items-center justify-between gap-4 sm:mb-6">
             <Dialog.Title className="font-(family-name:--font-title) text-xl font-semibold sm:text-2xl">

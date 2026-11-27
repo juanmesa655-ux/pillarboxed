@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { useSession } from "@/components/auth/session-provider";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,16 +13,12 @@ import {
 } from "@/lib/data/auth-repository";
 
 type ProfileValues = {
-  firstName: string;
-  lastName: string;
   career: string;
   semester: string;
 };
 
 function getProfileValues(user: AuthUser): ProfileValues {
   return {
-    firstName: user.firstName,
-    lastName: user.lastName,
     career: user.career,
     semester: String(user.semester),
   };
@@ -30,14 +27,9 @@ function getProfileValues(user: AuthUser): ProfileValues {
 function ProfileEditorForUser({ user }: { user: AuthUser }) {
   const { setAuthenticatedUser } = useSession();
   const [values, setValues] = useState(() => getProfileValues(user));
-  const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const semesterLimit = getMaxSemestersForCareer(values.career) ?? 0;
-
-  function updateValue(field: keyof ProfileValues, value: string) {
-    setValues((current) => ({ ...current, [field]: value }));
-  }
 
   function handleCareerChange(career: string) {
     const maxSemester = getMaxSemestersForCareer(career);
@@ -52,7 +44,6 @@ function ProfileEditorForUser({ user }: { user: AuthUser }) {
 
   function handleCancel() {
     setValues(getProfileValues(user));
-    setIsEditing(false);
     setError("");
     setNotice("");
   }
@@ -63,8 +54,8 @@ function ProfileEditorForUser({ user }: { user: AuthUser }) {
     setNotice("");
 
     const result = authRepository.updateProfile({
-      firstName: values.firstName,
-      lastName: values.lastName,
+      firstName: user.firstName,
+      lastName: user.lastName,
       career: values.career,
       semester: Number(values.semester),
     });
@@ -72,7 +63,7 @@ function ProfileEditorForUser({ user }: { user: AuthUser }) {
     if (!result.ok) {
       setError(
         result.reason === "invalid-data"
-          ? "Revisa tu nombre, apellido, carrera y semestre."
+          ? "Revisa la carrera y el semestre."
           : result.reason === "not-found"
             ? "No encontramos una sesión activa. Inicia sesión e inténtalo de nuevo."
             : "No pudimos guardar los cambios en este navegador. Inténtalo de nuevo.",
@@ -82,16 +73,12 @@ function ProfileEditorForUser({ user }: { user: AuthUser }) {
 
     setAuthenticatedUser(result.user);
     setValues(getProfileValues(result.user));
-    setIsEditing(false);
-    setNotice("Tu perfil se actualizó correctamente.");
+    setNotice("Tus datos se actualizaron correctamente.");
   }
 
   return (
-    <section
-      className="border border-border bg-(--surface)/60 p-5 sm:p-7"
-      aria-labelledby="profile-details-title"
-    >
-      <div className="flex flex-wrap items-start justify-between gap-4 border-b border-border pb-5">
+    <section aria-labelledby="profile-details-title">
+      <header className="mb-6 flex flex-wrap items-start justify-between gap-4 border-b border-border pb-5">
         <div>
           <h2
             id="profile-details-title"
@@ -100,164 +87,124 @@ function ProfileEditorForUser({ user }: { user: AuthUser }) {
             Información personal
           </h2>
           <p className="mt-2 text-sm leading-6 text-(--fg-secondary)">
-            Estos datos pertenecen a tu cuenta y se usan en la comunidad.
+            Solo puedes editar tu carrera y semestre.
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-4">
-          <Link
-            href={`/usuarios/${user.id}`}
-            className="text-sm text-(--fg-secondary) underline decoration-border underline-offset-4 hover:text-(--fg) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-          >
-            Volver a perfil
-          </Link>
-          {!isEditing && (
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => {
-                setError("");
-                setNotice("");
-                setIsEditing(true);
-              }}
-            >
-              Editar perfil
-            </Button>
-          )}
-        </div>
-      </div>
+        <Link
+          href={`/usuarios/${user.id}`}
+          className="inline-flex min-h-11 items-center gap-2 text-sm text-(--fg-secondary) transition-colors hover:text-(--fg) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
+          <ArrowLeft aria-hidden="true" className="size-4" />
+          Volver a perfil
+        </Link>
+      </header>
 
       {notice && (
-        <p className="mt-5 text-sm text-(--success)" role="status">
+        <p className="mb-5 text-sm text-(--success)" role="status">
           {notice}
         </p>
       )}
       {error && (
-        <p className="mt-5 text-sm text-(--error)" role="alert">
+        <p className="mb-5 text-sm text-(--error)" role="alert">
           {error}
         </p>
       )}
 
-      {isEditing ? (
-        <form className="mt-6 space-y-5" onSubmit={handleSubmit}>
-          <div className="grid gap-5 sm:grid-cols-2">
-            <div className="space-y-2">
-              <label htmlFor="profile-first-name" className="block text-sm font-medium">
-                Nombre
-              </label>
-              <input
-                id="profile-first-name"
-                name="firstName"
-                autoComplete="given-name"
-                required
-                value={values.firstName}
-                onChange={(event) => updateValue("firstName", event.target.value)}
-                className="h-11 w-full border border-(--border-strong) bg-(--bg-center) px-3 text-base text-(--fg) outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-(--surface)"
-              />
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="profile-last-name" className="block text-sm font-medium">
-                Apellido
-              </label>
-              <input
-                id="profile-last-name"
-                name="lastName"
-                autoComplete="family-name"
-                required
-                value={values.lastName}
-                onChange={(event) => updateValue("lastName", event.target.value)}
-                className="h-11 w-full border border-(--border-strong) bg-(--bg-center) px-3 text-base text-(--fg) outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-(--surface)"
-              />
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="profile-career" className="block text-sm font-medium">
-                Carrera
-              </label>
-              <select
-                id="profile-career"
-                name="career"
-                required
-                value={values.career}
-                onChange={(event) => handleCareerChange(event.target.value)}
-                className="h-11 w-full border border-(--border-strong) bg-(--bg-center) px-3 text-base text-(--fg) outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-(--surface)"
-              >
-                <option value="">Selecciona tu carrera</option>
-                {careerOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.value}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="profile-semester" className="block text-sm font-medium">
-                Semestre
-              </label>
-              <select
-                id="profile-semester"
-                name="semester"
-                required
-                value={values.semester}
-                onChange={(event) => updateValue("semester", event.target.value)}
-                className="h-11 w-full border border-(--border-strong) bg-(--bg-center) px-3 text-base text-(--fg) outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-(--surface)"
-              >
-                {Array.from({ length: semesterLimit }, (_, index) => (
-                  <option key={index + 1} value={index + 1}>
-                    {index + 1}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <div className="border-t border-border pt-5">
-            <p className="text-sm font-medium text-(--fg)">Correo institucional</p>
-            <p className="mt-1 text-sm text-(--fg-secondary)">{user.email}</p>
-            <p className="mt-2 text-xs leading-5 text-(--fg-muted)">
-              El correo identifica tu cuenta y no se puede cambiar desde esta pantalla.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap gap-3">
-            <Button type="submit">Guardar cambios</Button>
-            <Button type="button" variant="outline" onClick={handleCancel}>
-              Cancelar
-            </Button>
-          </div>
-        </form>
-      ) : (
-        <dl className="mt-6 grid gap-x-8 gap-y-5 sm:grid-cols-2">
-          <div>
-            <dt className="text-sm text-(--fg-muted)">
+      <form className="space-y-5" onSubmit={handleSubmit}>
+        <div className="grid gap-5 sm:grid-cols-2">
+          <div className="space-y-2">
+            <label htmlFor="profile-first-name" className="block text-sm font-medium">
               Nombre
-            </dt>
-            <dd className="mt-1 text-sm text-(--fg)">{user.firstName}</dd>
+            </label>
+            <input
+              id="profile-first-name"
+              type="text"
+              autoComplete="given-name"
+              readOnly
+              value={user.firstName}
+              className="h-11 w-full border border-(--border-strong) bg-(--surface-elevated) px-3 text-base text-(--fg-secondary) outline-none"
+            />
           </div>
-          <div>
-            <dt className="text-sm text-(--fg-muted)">
+          <div className="space-y-2">
+            <label htmlFor="profile-last-name" className="block text-sm font-medium">
               Apellido
-            </dt>
-            <dd className="mt-1 text-sm text-(--fg)">{user.lastName}</dd>
+            </label>
+            <input
+              id="profile-last-name"
+              type="text"
+              autoComplete="family-name"
+              readOnly
+              value={user.lastName}
+              className="h-11 w-full border border-(--border-strong) bg-(--surface-elevated) px-3 text-base text-(--fg-secondary) outline-none"
+            />
           </div>
-          <div>
-            <dt className="text-sm text-(--fg-muted)">
+          <div className="space-y-2">
+            <label htmlFor="profile-email" className="block text-sm font-medium">
               Correo institucional
-            </dt>
-            <dd className="mt-1 break-all text-sm text-(--fg)">{user.email}</dd>
+            </label>
+            <input
+              id="profile-email"
+              type="email"
+              autoComplete="email"
+              readOnly
+              value={user.email}
+              className="h-11 w-full border border-(--border-strong) bg-(--surface-elevated) px-3 text-base text-(--fg-secondary) outline-none"
+            />
           </div>
-          <div>
-            <dt className="text-sm text-(--fg-muted)">
+          <div className="space-y-2">
+            <label htmlFor="profile-career" className="block text-sm font-medium">
               Carrera
-            </dt>
-            <dd className="mt-1 text-sm text-(--fg)">{user.career}</dd>
+            </label>
+            <select
+              id="profile-career"
+              name="career"
+              required
+              value={values.career}
+              onChange={(event) => handleCareerChange(event.target.value)}
+              className="h-11 w-full border border-(--border-strong) bg-(--bg-center) px-3 text-base text-(--fg) outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg)"
+            >
+              <option value="">Selecciona tu carrera</option>
+              {careerOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.value}
+                </option>
+              ))}
+            </select>
           </div>
-          <div>
-            <dt className="text-sm text-(--fg-muted)">
+          <div className="space-y-2">
+            <label htmlFor="profile-semester" className="block text-sm font-medium">
               Semestre
-            </dt>
-            <dd className="mt-1 text-sm text-(--fg)">{user.semester}</dd>
+            </label>
+            <select
+              id="profile-semester"
+              name="semester"
+              required
+              disabled={semesterLimit === 0}
+              value={values.semester}
+              onChange={(event) =>
+                setValues((current) => ({
+                  ...current,
+                  semester: event.target.value,
+                }))
+              }
+              className="h-11 w-full border border-(--border-strong) bg-(--bg-center) px-3 text-base text-(--fg) outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg) disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {Array.from({ length: semesterLimit }, (_, index) => (
+                <option key={index + 1} value={index + 1}>
+                  {index + 1}
+                </option>
+              ))}
+            </select>
           </div>
-        </dl>
-      )}
+        </div>
+
+        <div className="flex flex-wrap gap-3 border-t border-border pt-5">
+          <Button type="submit">Guardar cambios</Button>
+          <Button type="button" variant="outline" onClick={handleCancel}>
+            Descartar cambios
+          </Button>
+        </div>
+      </form>
     </section>
   );
 }
@@ -265,10 +212,18 @@ function ProfileEditorForUser({ user }: { user: AuthUser }) {
 export function ProfileEditor() {
   const { state } = useSession();
 
-  if (state.status !== "ready") {
+  if (state.status === "loading") {
     return (
       <p className="text-sm text-(--fg-secondary)" role="status">
-        Cargando tu perfil...
+        Cargando tus ajustes...
+      </p>
+    );
+  }
+
+  if (state.status === "error") {
+    return (
+      <p className="text-sm text-(--error)" role="alert">
+        No pudimos comprobar tu sesión. Recarga la página e inténtalo de nuevo.
       </p>
     );
   }
@@ -276,7 +231,7 @@ export function ProfileEditor() {
   if (state.user === null) {
     return (
       <p className="text-sm text-(--error)" role="alert">
-        Necesitas iniciar sesión para consultar tu perfil.
+        Necesitas iniciar sesión para consultar tus ajustes.
       </p>
     );
   }

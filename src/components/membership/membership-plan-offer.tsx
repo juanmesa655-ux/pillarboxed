@@ -37,7 +37,7 @@ export function MembershipPlanOffer({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <article className="border border-(--accent)/60 bg-(--surface) p-6 sm:p-8">
+    <article className="rounded-lg border border-(--accent)/60 bg-(--surface) p-6 sm:p-8">
       {state.status === "loading" ? (
         <p className="py-6 text-sm text-(--fg-secondary)" role="status">
           Cargando el plan vigente...

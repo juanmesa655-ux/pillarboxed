@@ -104,7 +104,7 @@ export function FollowButton({ targetUserId }: { targetUserId: string }) {
         href="/perfil"
         className="text-sm text-(--fg-secondary) underline decoration-border underline-offset-4 hover:text-(--fg) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
-        Editar mi perfil
+        Ajustes de la cuenta
       </Link>
     );
   }

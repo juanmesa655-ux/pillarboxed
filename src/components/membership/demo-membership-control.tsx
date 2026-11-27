@@ -114,7 +114,7 @@ function DemoMembershipControlForUser({ userId }: { userId: string }) {
       </aside>
 
       <section
-        className="mt-6 border border-border bg-(--surface) p-5 sm:p-7"
+        className="mt-6 rounded-lg border border-border bg-(--surface) p-5 sm:p-7"
         aria-labelledby="membership-status-heading"
       >
         <h2

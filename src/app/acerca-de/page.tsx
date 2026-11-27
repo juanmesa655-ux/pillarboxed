@@ -79,7 +79,7 @@ export default function AboutPage() {
                   >
                     <span className="group-open:hidden">+</span>
                     <span className="hidden group-open:inline">−</span>
-                  </span>
+                  </span> 
                 </summary>
                 <p className="pb-5 pr-8 leading-7 text-(--fg-secondary)">
                   {item.answer}

@@ -74,7 +74,7 @@ function NotificationBellForUser({
           sideOffset={8}
           className="z-50"
         >
-          <Popover.Popup className="max-h-[min(70vh,34rem)] w-[min(27rem,calc(100vw-2rem))] overflow-hidden border border-border bg-(--surface-elevated) text-(--fg) shadow-lg outline-none">
+          <Popover.Popup className="max-h-[min(70vh,34rem)] w-[min(27rem,calc(100vw-2rem))] overflow-hidden rounded-lg border border-border bg-(--surface-elevated) text-(--fg) shadow-lg outline-none">
             <div className="border-b border-border px-4 py-3">
               <Popover.Title className="font-(family-name:--font-title) text-xl font-semibold text-(--fg)">
                 Notificaciones
@@ -83,7 +83,7 @@ function NotificationBellForUser({
                 Avisos de esta cuenta de prueba.
               </Popover.Description>
             </div>
-            <div className="max-h-[calc(70vh-8rem)] overflow-y-auto p-2">
+            <div className="auth-registration-scroll max-h-[calc(70vh-8rem)] overflow-y-auto p-2">
               <NotificationList
                 feed={feed}
                 limit={6}

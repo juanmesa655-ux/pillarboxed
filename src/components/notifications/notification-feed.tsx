@@ -224,7 +224,7 @@ export function NotificationList({
                     onClick={(event) => {
                       if (!markAsRead(notification.id)) event.preventDefault();
                     }}
-                    className={`block px-3 py-4 transition-colors hover:bg-(--surface) focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent ${
+                    className={`block rounded-lg px-3 py-4 transition-colors hover:bg-(--surface) focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent ${
                       notification.isRead ? "" : "bg-(--accent)/5"
                     }`}
                   >
@@ -241,7 +241,7 @@ export function NotificationList({
                     onClick={(event) => {
                       if (!markAsRead(notification.id)) event.preventDefault();
                     }}
-                    className={`block px-3 py-4 transition-colors hover:bg-(--surface) focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent ${
+                    className={`block rounded-lg px-3 py-4 transition-colors hover:bg-(--surface) focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent ${
                       notification.isRead ? "" : "bg-(--accent)/5"
                     }`}
                   >

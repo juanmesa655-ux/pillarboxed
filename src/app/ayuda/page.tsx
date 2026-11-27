@@ -90,7 +90,7 @@ const helpSections = [
       {
         question: "¿Qué beneficios tendría la membresía?",
         answer:
-          "La propuesta contempla personalización del perfil, una insignia y participación prioritaria, como el voto ponderado y la creación de butacas compartidas. Crear butacas está disponible para Miembros colaboradores con beneficios vigentes, desde el detalle de una función próxima. Desde Mi perfil puedes consultar tu suscripción, iniciar una simulación de pago y revisar las transacciones de prueba. No se realizan cobros reales ni se solicitan datos financieros.",
+          "La propuesta contempla personalización del perfil, una insignia y participación prioritaria, como el voto ponderado y la creación de butacas compartidas. Crear butacas está disponible para Miembros colaboradores con beneficios vigentes, desde el detalle de una función próxima. Desde Ajustes de la cuenta puedes consultar tu suscripción, iniciar una simulación de pago y revisar las transacciones de prueba. No se realizan cobros reales ni se solicitan datos financieros.",
       },
       {
         question: "¿Se realiza algún cobro?",

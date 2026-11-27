@@ -36,7 +36,7 @@ function NotificationInboxForUser({
   const feed = useNotificationFeed(userId, userName);
 
   return (
-    <div className="border border-border bg-(--surface)/60 p-4 sm:p-6">
+    <div className="rounded-lg border border-border bg-(--surface)/60 p-4 sm:p-6">
       <NotificationList feed={feed} />
     </div>
   );

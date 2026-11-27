@@ -26,7 +26,7 @@ export default function CreditsPage() {
 
           <section
             aria-labelledby="tmdb-credit-heading"
-            className="mt-9 border border-border bg-(--surface) p-6 sm:p-8"
+            className="mt-9 border border-border bg-(--surface) p-6 sm:p-8 rounded-lg"
           >
             <h2
               id="tmdb-credit-heading"
@@ -44,13 +44,6 @@ export default function CreditsPage() {
               respaldado ni certificado por TMDB.
             </p>
           </section>
-
-          <Link
-            href="/acerca-de"
-            className="mt-7 inline-flex text-sm text-(--fg-secondary) underline decoration-border underline-offset-4 hover:text-(--fg) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-          >
-            Volver a preguntas frecuentes
-          </Link>
         </main>
       </div>
       <Footer />

@@ -56,7 +56,7 @@ export default function MembershipPage() {
             aria-label="Opciones de membresía"
             className="mt-8 grid gap-5 md:grid-cols-2"
           >
-            <article className="border border-border bg-(--surface) p-6 sm:p-8">
+            <article className="rounded-lg border border-border bg-(--surface) p-6 sm:p-8">
               <header>
                 <h2 className="font-(family-name:--font-title) text-3xl font-semibold text-(--fg)">
                   Miembro
